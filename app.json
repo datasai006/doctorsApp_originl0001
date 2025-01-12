@@ -1,10 +1,41 @@
 {
   "expo": {
+    "newArchEnabled": true,
     "scheme": "acme",
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-secure-store"
     ],
-    "name": "doctor-appointment-app",
-    "slug": "doctor-appointment-app"
+    "name": "myhealthhubm",
+    "slug": "myhealthhubm",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "platforms": ["ios", "android", "web"],
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "ios": {
+      "icon": "./assets/images/icon.png",
+      "splash": {
+        "image": "./assets/images/logo.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png",
+      "splash": {
+        "image": "./assets/images/logo.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
+    }
   }
 }
