@@ -145,21 +145,29 @@ import Dashboard from '../screens/Dashboard';
 import PatientDashboard from '../screens/Patient/Dashboard';
 import ManageHospitals from '../screens/Admin/ManageHospital';
 import ManageDoctors from '../screens/Admin/ManageDoctors';
+import ManageStates from '../screens/Admin/ManageState';
+import ManageDistricts from '../screens/Admin/ManageDistricts';
 import Appointments from '../screens/Doctor/Appointments';
-import Profile from '../components/Profile';
+import Profile from '../screens/Doctor/Profile';
 import CustomSidebar from '../components/CustomSidebar';
 import Login from '../screens/Auth/Login';
 import SignUp from '../screens/Auth/SignUp';
 import ForgotPassword from '../screens/Auth/ForgotPassword';
 import OTP from "../screens/Auth/OtpPage";
+import NewPasswordPage from '../screens/Auth/NewPasswordPage';
 import ManagePatients from '../screens/Admin/ManagePatients';
 import PatientsScreen from '../screens/Doctor/PatientsScreen';
 import AppointmentsScreen from '../screens/Doctor/AppointmentsScreen';
 import TasksScreen from '../screens/Doctor/TasksScreen';
 import HospitalsScreen from '../screens/Doctor/HospitalsScreen';
+import ProfileManagement from '../screens/Admin/ProfileManagement';
+import EmergencyOPScreen from '../screens/Admin/Emergency';
+import ManageDepartments from '../screens/Admin/ManageDepartments';
+import ChangePassword from '../screens/Doctor/ChangePassword';
+import ManageSlots from '../screens/Doctor/ManageSlots';
 
 const Drawer = createDrawerNavigator();
-const AppNavigator = ({ role = 'patient' }) => {
+const AppNavigator = ({ role }) => {
   const dashboards = {
     admin: AdminDashboard,
     doctor: DoctorDashboard,
@@ -171,14 +179,19 @@ const AppNavigator = ({ role = 'patient' }) => {
       { name: "ManageHospitals", component: ManageHospitals },
       { name: "ManageDoctors", component: ManageDoctors },
       { name: "ManagePatients", component: ManagePatients },
+      { name: "ManageStates", component: ManageStates },
+      { name: "ManageDistricts", component: ManageDistricts },
+      { name: "EmergencyOPdata", component: EmergencyOPScreen },
+      { name: "Departments", component: ManageDepartments },
+      { name: "Profile", component: ProfileManagement },
     ],
     doctor: [
       { name: "Appointments", component: Appointments },
-      { name: "PatientsScreen", component: PatientsScreen },
+      // { name: "PatientsScreen", component: PatientsScreen },
       { name: "AppointmentsScreen", component: AppointmentsScreen },
-      { name: "TasksScreen", component: TasksScreen },
-      { name: "HospitalsScreen", component: HospitalsScreen },
-
+      {name:"ChangePassword",component:ChangePassword},
+      { name: "ManageSlots", component: ManageSlots },
+      // { name: "HospitalsScreen", component: HospitalsScreen },
       { name: "Profile", component: Profile },
     ],
     patient: [
@@ -212,6 +225,8 @@ const AppNavigator = ({ role = 'patient' }) => {
       <Drawer.Screen name="SignUp" component={SignUp} />
       <Drawer.Screen name="ForgotPassword" component={ForgotPassword} />
       <Drawer.Screen name="OTP" component={OTP} />
+      <Drawer.Screen name="NewPasswordPage" component={NewPasswordPage} />
+
     </Drawer.Navigator>
   );
 };

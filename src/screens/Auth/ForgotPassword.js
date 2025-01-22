@@ -129,7 +129,7 @@ const ForgotPassword = ({ navigation }) => {
       Alert.alert('OTP Sent', `An OTP has been sent to ${mobile}`);
       
       // Navigate to OTP page
-      navigation.navigate('OtpPage', { mobile });
+      navigation.navigate('OTP', { mobile });
     }
   };
 
