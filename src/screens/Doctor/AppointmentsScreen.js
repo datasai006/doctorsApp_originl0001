@@ -15,7 +15,7 @@ const AppointmentsScreen = () => {
   const [appointments, setAppointments] = useState([
     {
       id: '1',
-      doctor: 'Dr. John Doe',
+     
       patient: 'Jane Smith',
       date: '2025-01-12',
       time: '10:00 AM',
@@ -23,7 +23,7 @@ const AppointmentsScreen = () => {
     },
     {
       id: '2',
-      doctor: 'Dr. Alice Brown',
+  
       patient: 'Michael Johnson',
       date: '2025-01-13',
       time: '11:30 AM',
@@ -31,7 +31,6 @@ const AppointmentsScreen = () => {
     },
     {
       id: '3',
-      doctor: 'Dr. Peter Parker',
       patient: 'Sarah Brown',
       date: '2025-01-14',
       time: '02:00 PM',

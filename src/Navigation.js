@@ -85,9 +85,17 @@ const AuthNavigator = () => {
 //   );
 // };
 
-const Navigation = ({ userRole }) => {
+// const Navigation = ({ userRole }) => {
 
-  const isAuthenticated = true; 
+//   const isAuthenticated = true; 
+//   return isAuthenticated ? <AppNavigator role={userRole} /> : <AuthNavigator />;
+// };
+// export default Navigation;
+
+const Navigation = ({ userRole }) => {
+  const isAuthenticated = true; // Placeholder for authentication status
+  
   return isAuthenticated ? <AppNavigator role={userRole} /> : <AuthNavigator />;
 };
+
 export default Navigation;
