@@ -76,14 +76,113 @@
 // });
 
 
+// import React, { useEffect, useState } from 'react';
+// import { View, StyleSheet } from 'react-native';
+// import * as SplashScreen from 'expo-splash-screen';
+// import Navigation from './src/Navigation'; // Import your Navigation component
+
+// const App = () => {
+//   const [isReady, setIsReady] = useState(false); // Track if the app is ready
+//   const userRole = 'patient'; //  admin ,  doctor ,  patient ,
+
+//   useEffect(() => {
+//     const prepareApp = async () => {
+//       try {
+//         await SplashScreen.preventAutoHideAsync(); // Keep the splash screen visible
+//         await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate a delay
+//       } catch (e) {
+//         console.warn(e);
+//       } finally {
+//         setIsReady(true); // Mark the app as ready
+//         await SplashScreen.hideAsync(); // Hide the splash screen
+//       }
+//     };
+
+//     prepareApp();
+//   }, []);
+
+//   if (!isReady) {
+//     return null;
+//   }
+
+//   return <Navigation userRole={userRole} />;
+// };
+
+// export default App;
+
+
+// import React, { useEffect, useState } from 'react';
+// import { View, StyleSheet, StatusBar } from 'react-native';
+// import * as SplashScreen from 'expo-splash-screen';
+// import { SafeAreaView } from 'react-native';
+// import Navigation from './src/Navigation'; // Import your Navigation component
+
+// const App = () => {
+//   const [isReady, setIsReady] = useState(false); // Track if the app is ready
+//   const userRole = 'patient'; // admin, doctor, patient
+
+//   useEffect(() => {
+//     const prepareApp = async () => {
+//       try {
+//         await SplashScreen.preventAutoHideAsync(); // Keep the splash screen visible
+//         await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate a delay
+//       } catch (e) {
+//         console.warn(e);
+//       } finally {
+//         setIsReady(true); // Mark the app as ready
+//         await SplashScreen.hideAsync(); // Hide the splash screen
+//       }
+//     };
+
+//     prepareApp();
+//   }, []);
+
+//   if (!isReady) {
+//     return null; // Prevent rendering until the app is ready
+//   }
+
+//   // return (
+//   //   <View style={styles.container}>
+//   //     {/* StatusBar Configuration */}
+//   //     <StatusBar 
+//   //       barStyle="dark-content" // Use 'light-content' for dark backgrounds
+//   //       backgroundColor="transparent"
+//   //       translucent={true} // Makes the status bar overlay the app content
+//   //     />
+//   //     <Navigation userRole={userRole} />
+//   //   </View>
+//   // );
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <StatusBar
+//         barStyle="dark-content"
+//         backgroundColor="transparent"
+//         translucent={true}
+//       />
+//       <Navigation userRole={userRole} />
+//     </SafeAreaView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: 'white', // Background color of your app
+//      // Padding to avoid overlapping with the status bar
+//   },
+// });
+
+// export default App;
+
+
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import Navigation from './src/Navigation'; // Import your Navigation component
 
 const App = () => {
   const [isReady, setIsReady] = useState(false); // Track if the app is ready
-  const userRole = 'patient'; //  admin ,  doctor ,  patient ,
+  const userRole = 'admin'; // admin, doctor, patient
 
   useEffect(() => {
     const prepareApp = async () => {
@@ -102,10 +201,36 @@ const App = () => {
   }, []);
 
   if (!isReady) {
-    return null;
+    return null; // Prevent rendering until the app is ready
   }
 
-  return <Navigation userRole={userRole} />;
+  return (
+    <View style={styles.container}>
+      <StatusBar
+        barStyle="dark-content" // Use 'light-content' for dark backgrounds
+        backgroundColor="transparent"
+        translucent={false} // Makes it overlay the app content
+      />
+      <Navigation userRole={userRole} />
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+   
+    flex: 1,
+    backgroundColor: 'white', // App's main background color
+    ...Platform.select({
+      android: {
+        // paddingTop: StatusBar.currentHeight || 0, // Handle Android status bar height'
+        paddingTop: 0
+      },
+      ios: {
+        paddingTop: 0, 
+      },
+    }),
+  },
+});
 
 export default App;

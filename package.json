@@ -12,6 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-native-async-storage/root": "github:react-native-async-storage/async-storage",
+    "@react-native-clipboard/clipboard": "^1.16.1",
     "@react-native-community/datetimepicker": "^8.2.0",
     "@react-native-picker/picker": "^2.11.0",
     "@react-navigation/drawer": "^7.1.1",
@@ -20,12 +21,16 @@
     "@react-navigation/stack": "^7.1.1",
     "axios": "^1.7.9",
     "expo": "^52.0.16",
+    "expo-clipboard": "^7.0.1",
     "expo-constants": "~17.0.2",
+    "expo-document-picker": "~13.0.2",
+    "expo-file-system": "~18.0.7",
     "expo-image-picker": "~16.0.4",
     "expo-linking": "~7.0.2",
     "expo-location": "^18.0.5",
     "expo-router": "~4.0.2",
     "expo-secure-store": "~14.0.0",
+    "expo-sharing": "^13.0.1",
     "expo-splash-screen": "~0.29.7",
     "expo-status-bar": "~2.0.0",
     "jwt-decode": "^4.0.0",
@@ -47,7 +52,10 @@
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^4.0.0"
   },
   "private": true
 }

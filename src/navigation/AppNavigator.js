@@ -165,6 +165,13 @@ import EmergencyOPScreen from '../screens/Admin/Emergency';
 import ManageDepartments from '../screens/Admin/ManageDepartments';
 import ChangePassword from '../screens/Doctor/ChangePassword';
 import ManageSlots from '../screens/Doctor/ManageSlots';
+import MyAppointments from '../screens/Patient/MyAppointments';
+import BookAppointments from '../screens/Patient/BookAppointments';
+import PatientProfile from '../screens/Patient/Profile';
+import SupportHelpCenter from '../screens/Patient/SupportHelpCenter';
+import PrivacyPolicy from '../screens/Patient/PrivacyPolicy';
+import ReferFriend from '../screens/Patient/ReferFriend';
+import HealthRecords from '../screens/Patient/HealthRecords';
 
 const Drawer = createDrawerNavigator();
 const AppNavigator = ({ role }) => {
@@ -195,8 +202,14 @@ const AppNavigator = ({ role }) => {
       { name: "Profile", component: Profile },
     ],
     patient: [
-      { name: "Appointments", component: Appointments },
-      { name: "Profile", component: Profile },
+      { name: "MyAppointments", component: MyAppointments },
+      { name: "PatientProfile", component: PatientProfile },
+      { name: "BookAppointments", component: BookAppointments },
+      {name:"SupportHelpCenter", component:SupportHelpCenter},
+      {name:"PrivacyPolicy",component:PrivacyPolicy},
+      {name:"ReferFriend",component:ReferFriend},
+      {name:"HealthRecords",component:HealthRecords},
+
     ],
   };
 
