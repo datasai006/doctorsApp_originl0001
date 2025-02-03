@@ -701,10 +701,16 @@ const CustomSidebar = ({ navigation, role, userName = 'venky ', isLoggedIn = tru
       
     ],
     patient: [
-      { title: 'Dashboard', route: 'Dashboard', icon: 'dashboard' },
-      { title: 'Appointments', route: 'Appointments', icon: 'event' },
+      { title: 'Dashboard', route: 'Dashboard', icon: 'dashboard' }, 
+      { title: 'Book Appointments', route: 'BookAppointments', icon: 'event-available' }, 
+      { title: 'My Appointments', route: 'MyAppointments', icon: 'event-note' },
+      { title: 'Health Records', route: 'HealthRecords', icon: 'folder' },
+      { title: 'Profile', route: 'PatientProfile', icon: 'person' }, 
+      { title: 'Support & Help Center', route: 'SupportHelpCenter', icon: 'help-outline' }, 
+      { title: 'Privacy & Policy', route: 'PrivacyPolicy', icon: 'privacy-tip' }, 
       { title: 'Refer Friend', route: 'ReferFriend', icon: 'share' },
     ],
+    
   };
 
   const filteredMenuItems = menuItems[role]?.filter((item) =>

@@ -1459,84 +1459,488 @@
 // export default Dashboard;
 
 
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   TouchableOpacity,
+//   TextInput,
+//   FlatList,
+// } from 'react-native';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// const Dashboard = () => {
+//   const [searchText, setSearchText] = useState('');
+
+//   const departments = [
+//     { id: 1, iconName: 'favorite', name: 'Cardiology' },
+//     { id: 2, iconName: 'psychology', name: 'Neurology' },
+//     { id: 3, iconName: 'healing', name: 'Orthopedics' },
+//     { id: 4, iconName: 'child-care', name: 'Pediatrics' },
+//   ];
+
+//   const hospitals = [
+//     { id: 1, name: 'City Hospital', address: '123 Main Street, Cityville' },
+//     { id: 2, name: 'Metro Hospital', address: '456 High Street, Metropolis' },
+//     { id: 3, name: 'Green Valley Hospital', address: '789 Elm Street, Green Town' },
+//     { id: 4, name: 'Lakeview Hospital', address: '101 River Road, Lake City' },
+//     { id: 5, name: 'Sunshine Hospital', address: '202 Sunshine Blvd, Sunnyvale' },
+//     { id: 6, name: 'Hilltop Hospital', address: '303 Hilltop Drive, Mountainview' },
+//   ];
+
+//   const recommendedHospitals = hospitals.slice(0, 3);
+
+//   const renderDepartment = ({ item }) => (
+//     <View style={styles.departmentCard}>
+//       <Icon name={item.iconName} size={40} color="#EC268F" style={styles.departmentIcon} />
+//       <Text style={styles.departmentName}>{item.name}</Text>
+//     </View>
+//   );
+
+//   const renderHospital = ({ item }) => (
+//     <View style={styles.hospitalCardImproved}>
+//       <View style={styles.hospitalCardHeader}>
+//         <Text style={styles.hospitalName}>{item.name}</Text>
+//       </View>
+//       <Text style={styles.hospitalAddress}>{item.address}</Text>
+//     </View>
+//   );
+
+//   const handleSearch = (text) => {
+//     setSearchText(text);
+//   };
+
+//   // Filtered lists based on the search text
+//   const filteredDepartments = departments.filter((department) =>
+//     department.name.toLowerCase().includes(searchText.toLowerCase())
+//   );
+
+//   const filteredHospitals = hospitals.filter((hospital) =>
+//     hospital.name.toLowerCase().includes(searchText.toLowerCase()) ||
+//     hospital.address.toLowerCase().includes(searchText.toLowerCase())
+//   );
+
+//   const filteredRecommendedHospitals = recommendedHospitals.filter((hospital) =>
+//     hospital.name.toLowerCase().includes(searchText.toLowerCase()) ||
+//     hospital.address.toLowerCase().includes(searchText.toLowerCase())
+//   );
+
+//   return (
+//     <FlatList
+//       data={[
+//         { type: 'search', key: 'search' },
+//         { type: 'departments', key: 'departments' },
+//         { type: 'recommendedHospitals', key: 'recommendedHospitals' },
+//         { type: 'hospitals', key: 'hospitals' },
+//       ]}
+//       renderItem={({ item }) => {
+//         switch (item.key) {
+//           case 'search':
+//             return (
+//               <View style={styles.searchBar}>
+//                 <Icon name="search" size={24} color="#aaa" />
+//                 <TextInput
+//                   style={styles.searchInput}
+//                   placeholder="Search for hospitals, departments, etc."
+//                   value={searchText}
+//                   onChangeText={handleSearch}
+//                 />
+//               </View>
+//             );
+//           case 'departments':
+//             return (
+//               <View style={styles.section}>
+//                 <Text style={styles.sectionTitle}>Departments</Text>
+//                 {filteredDepartments.length > 0 ? (
+//                   <FlatList
+//                     data={filteredDepartments}
+//                     renderItem={renderDepartment}
+//                     keyExtractor={(item) => item.id.toString()}
+//                     horizontal
+//                     showsHorizontalScrollIndicator={false}
+//                   />
+//                 ) : (
+//                   <Text style={styles.noResultsText}>No departments found.</Text>
+//                 )}
+//               </View>
+//             );
+//           case 'recommendedHospitals':
+//             return (
+//               <View style={styles.section}>
+//                 <Text style={styles.sectionTitle}>Recommended Hospitals</Text>
+//                 {filteredRecommendedHospitals.length > 0 ? (
+//                   <FlatList
+//                     data={filteredRecommendedHospitals}
+//                     renderItem={renderHospital}
+//                     keyExtractor={(item) => item.id.toString()}
+//                     horizontal
+//                     showsHorizontalScrollIndicator={false}
+//                   />
+//                 ) : (
+//                   <Text style={styles.noResultsText}>No recommended hospitals found.</Text>
+//                 )}
+//               </View>
+//             );
+//           case 'hospitals':
+//             return (
+//               <View style={styles.section}>
+//                 <Text style={styles.sectionTitle}>Hospitals</Text>
+//                 {filteredHospitals.length > 0 ? (
+//                   <FlatList
+//                     data={filteredHospitals}
+//                     renderItem={renderHospital}
+//                     keyExtractor={(item) => item.id.toString()}
+//                     contentContainerStyle={styles.hospitalsList}
+//                     numColumns={1}
+//                   />
+//                 ) : (
+//                   <Text style={styles.noResultsText}>No hospitals found.</Text>
+//                 )}
+//               </View>
+//             );
+//           default:
+//             return null;
+//         }
+//       }}
+//       keyExtractor={(item) => item.key}
+//       ListFooterComponent={() => (
+//         <TouchableOpacity
+//           style={styles.scrollToTopButton}
+//           onPress={() => {
+//             // Scroll to top logic
+//           }}
+//         >
+//           <Icon name="arrow-upward" size={24} color="#fff" />
+//         </TouchableOpacity>
+//       )}
+//     />
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: { flex: 1, backgroundColor: '#f9f9f9' },
+//   searchBar: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     backgroundColor: '#fff',
+//     margin: 10,
+//     padding: 10,
+//     borderRadius: 10,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 5,
+//     elevation: 2,
+//   },
+//   searchInput: { marginLeft: 10, flex: 1 },
+//   section: { marginTop: 20, paddingHorizontal: 10 },
+//   sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+//   departmentCard: {
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     padding: 10,
+//     marginRight: 10,
+//     borderRadius: 10,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 5,
+//     elevation: 2,
+//   },
+//   departmentIcon: { marginBottom: 10 },
+//   departmentName: { fontSize: 14, fontWeight: 'bold' },
+//   hospitalsList: { justifyContent: 'space-between', paddingHorizontal: 5 },
+//   hospitalCardImproved: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     margin: 5,
+//     borderRadius: 15,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 6,
+//     elevation: 4,
+//     padding: 15,
+//     borderWidth: 1,
+//     borderColor: '#e6e6e6',
+//   },
+//   hospitalCardHeader: {
+//     backgroundColor: '#00B4F6',
+//     padding: 10,
+//     borderRadius: 10,
+//     alignItems: 'center',
+//     marginBottom: 10,
+//   },
+//   hospitalName: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     color: '#fff',
+//     textAlign: 'center',
+//   },
+//   hospitalAddress: {
+//     fontSize: 14,
+//     color: '#555',
+//     textAlign: 'center',
+//     marginTop: 5,
+//   },
+//   scrollToTopButton: {
+//     position: 'absolute',
+//     bottom: 20,
+//     right: 20,
+//     backgroundColor: '#00B4F6',
+//     padding: 15,
+//     borderRadius: 50,
+//     elevation: 5,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.3,
+//     shadowRadius: 6,
+//   },
+//   noResultsText: { fontSize: 14, color: '#aaa', textAlign: 'center', marginTop: 10 },
+// });
+
+// export default Dashboard;
+
+
+// import React, { useState } from 'react';
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   TextInput,
+//   FlatList,
+//   TouchableOpacity,
+// } from 'react-native';
+// import { ScrollView } from 'react-native';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+
+// const Dashboard = () => {
+//   const [searchText, setSearchText] = useState('');
+
+//   const departments = [
+//     { id: 1, iconName: 'favorite', name: 'Cardiology' },
+//     { id: 2, iconName: 'psychology', name: 'Neurology' },
+//     { id: 3, iconName: 'healing', name: 'Orthopedics' },
+//     { id: 4, iconName: 'child-care', name: 'Pediatrics' },
+//   ];
+
+//   const hospitals = [
+//     { id: 1, name: 'City Hospital', address: '123 Main Street, Cityville' },
+//     { id: 2, name: 'Metro Hospital', address: '456 High Street, Metropolis' },
+//     { id: 3, name: 'Green Valley Hospital', address: '789 Elm Street, Green Town' },
+//     { id: 4, name: 'Lakeview Hospital', address: '101 River Road, Lake City' },
+//     { id: 5, name: 'Sunshine Hospital', address: '202 Sunshine Blvd, Sunnyvale' },
+//     { id: 6, name: 'Hilltop Hospital', address: '303 Hilltop Drive, Mountainview' },
+//   ];
+
+//   const recommendedHospitals = hospitals.slice(0, 3);
+
+//   const handleSearch = (text) => {
+//     setSearchText(text);
+//   };
+
+//   // Filtered lists based on search text
+//   const filteredDepartments = departments.filter((department) =>
+//     department.name.toLowerCase().includes(searchText.toLowerCase())
+//   );
+
+//   const filteredHospitals = hospitals.filter((hospital) =>
+//     hospital.name.toLowerCase().includes(searchText.toLowerCase()) ||
+//     hospital.address.toLowerCase().includes(searchText.toLowerCase())
+//   );
+
+//   const sections = [
+//     { type: 'search', key: 'search' },
+//     { type: 'departments', key: 'departments', data: filteredDepartments },
+//     { type: 'recommendedHospitals', key: 'recommendedHospitals', data: recommendedHospitals },
+//     { type: 'hospitals', key: 'hospitals', data: filteredHospitals },
+//   ];
+
+//   const renderSection = ({ item }) => {
+//     switch (item.type) {
+//       case 'search':
+//         return (
+//           <View style={styles.searchBar}>
+//             <Icon name="search" size={24} color="#aaa" />
+//             <TextInput
+//               style={styles.searchInput}
+//               placeholder="Search for hospitals, departments, etc."
+//               value={searchText}
+//               onChangeText={handleSearch}
+//             />
+//           </View>
+//         );
+//       case 'departments':
+//         return (
+//           <View style={styles.section}>
+//             <Text style={styles.sectionTitle}>Departments</Text>
+//             <FlatList
+//               data={item.data}
+//               renderItem={({ item }) => (
+//                 <View style={styles.departmentCard}>
+//                   <Icon name={item.iconName} size={40} color="#EC268F" style={styles.departmentIcon} />
+//                   <Text style={styles.departmentName}>{item.name}</Text>
+//                 </View>
+//               )}
+//               keyExtractor={(item) => item.id.toString()}
+//               horizontal
+//               showsHorizontalScrollIndicator={false}
+//               nestedScrollEnabled
+//             />
+//           </View>
+//         );
+//       case 'recommendedHospitals':
+//         return (
+//           <View style={styles.section}>
+//             <Text style={styles.sectionTitle}>Recommended Hospitals</Text>
+//             <FlatList
+//               data={item.data}
+//               renderItem={({ item }) => (
+//                 <View style={styles.hospitalCardImproved}>
+//                   <Text style={styles.hospitalName}>{item.name}</Text>
+//                   <Text style={styles.hospitalAddress}>{item.address}</Text>
+//                 </View>
+//               )}
+//               keyExtractor={(item) => item.id.toString()}
+//               horizontal
+//               showsHorizontalScrollIndicator={false}
+//               nestedScrollEnabled
+//             />
+//           </View>
+//         );
+//       case 'hospitals':
+//         return (
+//           <View style={styles.section}>
+//             <Text style={styles.sectionTitle}>Hospitals</Text>
+//             <FlatList
+//               data={item.data}
+//               renderItem={({ item }) => (
+//                 <View style={styles.hospitalCardImproved}>
+//                   <Text style={styles.hospitalName}>{item.name}</Text>
+//                   <Text style={styles.hospitalAddress}>{item.address}</Text>
+//                 </View>
+//               )}
+//               keyExtractor={(item) => item.id.toString()}
+//               nestedScrollEnabled
+//             />
+//           </View>
+//         );
+//       default:
+//         return null;
+//     }
+//   };
+
+//   return (
+//     <FlatList
+//       data={sections}
+//       renderItem={renderSection}
+//       keyExtractor={(item) => item.key}
+//     />
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   searchBar: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     backgroundColor: '#fff',
+//     margin: 10,
+//     padding: 10,
+//     borderRadius: 10,
+//     elevation: 2,
+//   },
+//   searchInput: { marginLeft: 10, flex: 1 },
+//   section: { marginTop: 20, paddingHorizontal: 10 },
+//   sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+//   departmentCard: {
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     padding: 10,
+//     marginRight: 10,
+//     borderRadius: 10,
+//     elevation: 2,
+//   },
+//   departmentIcon: { marginBottom: 10 },
+//   departmentName: { fontSize: 14, fontWeight: 'bold' },
+//   hospitalCardImproved: {
+//     backgroundColor: '#fff',
+//     padding: 15,
+//     borderRadius: 15,
+//     marginVertical: 5,
+//     borderWidth: 1,
+//     borderColor: '#e6e6e6',
+//   },
+//   hospitalName: { fontSize: 16, fontWeight: 'bold' },
+//   hospitalAddress: { fontSize: 14, color: '#555', marginTop: 5 },
+// });
+
+// export default Dashboard;
+
+import React, { useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  TouchableOpacity,
   TextInput,
   FlatList,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+  ScrollView,
+  StyleSheet,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons"; // Ensure you have this library installed
 
 const Dashboard = () => {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
+  // Sample data for departments, recommended hospitals, and hospitals
   const departments = [
-    { id: 1, iconName: 'favorite', name: 'Cardiology' },
-    { id: 2, iconName: 'psychology', name: 'Neurology' },
-    { id: 3, iconName: 'healing', name: 'Orthopedics' },
-    { id: 4, iconName: 'child-care', name: 'Pediatrics' },
+    { id: "1", name: "Cardiology" },
+    { id: "2", name: "Neurology" },
+    { id: "3", name: "Pediatrics" },
+  ];
+
+  const recommendedHospitals = [
+    { id: "1", name: "City Hospital" },
+    { id: "2", name: "Metro Hospital" },
+    { id: "3", name: "Sunrise Hospital" },
   ];
 
   const hospitals = [
-    { id: 1, name: 'City Hospital', address: '123 Main Street, Cityville' },
-    { id: 2, name: 'Metro Hospital', address: '456 High Street, Metropolis' },
-    { id: 3, name: 'Green Valley Hospital', address: '789 Elm Street, Green Town' },
-    { id: 4, name: 'Lakeview Hospital', address: '101 River Road, Lake City' },
-    { id: 5, name: 'Sunshine Hospital', address: '202 Sunshine Blvd, Sunnyvale' },
-    { id: 6, name: 'Hilltop Hospital', address: '303 Hilltop Drive, Mountainview' },
+    { id: "1", name: "Green Valley Hospital" },
+    { id: "2", name: "Blue Care Hospital" },
+    { id: "3", name: "Riverfront Hospital" },
   ];
 
-  const recommendedHospitals = hospitals.slice(0, 3);
-
-  const renderDepartment = ({ item }) => (
-    <View style={styles.departmentCard}>
-      <Icon name={item.iconName} size={40} color="#EC268F" style={styles.departmentIcon} />
-      <Text style={styles.departmentName}>{item.name}</Text>
-    </View>
-  );
-
-  const renderHospital = ({ item }) => (
-    <View style={styles.hospitalCardImproved}>
-      <View style={styles.hospitalCardHeader}>
-        <Text style={styles.hospitalName}>{item.name}</Text>
-      </View>
-      <Text style={styles.hospitalAddress}>{item.address}</Text>
-    </View>
-  );
-
+  // Search handler
   const handleSearch = (text) => {
     setSearchText(text);
+    // Add filtering logic if needed
   };
 
-  // Filtered lists based on the search text
-  const filteredDepartments = departments.filter((department) =>
-    department.name.toLowerCase().includes(searchText.toLowerCase())
+  // Render individual department
+  const renderDepartment = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{item.name}</Text>
+    </View>
   );
 
-  const filteredHospitals = hospitals.filter((hospital) =>
-    hospital.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    hospital.address.toLowerCase().includes(searchText.toLowerCase())
-  );
-
-  const filteredRecommendedHospitals = recommendedHospitals.filter((hospital) =>
-    hospital.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    hospital.address.toLowerCase().includes(searchText.toLowerCase())
+  // Render individual hospital
+  const renderHospital = ({ item }) => (
+    <View style={styles.item}>
+      <Text style={styles.itemText}>{item.name}</Text>
+    </View>
   );
 
   return (
     <FlatList
       data={[
-        { type: 'search', key: 'search' },
-        { type: 'departments', key: 'departments' },
-        { type: 'recommendedHospitals', key: 'recommendedHospitals' },
-        { type: 'hospitals', key: 'hospitals' },
+        { type: "search", key: "search" },
+        { type: "departments", key: "departments" },
+        { type: "recommendedHospitals", key: "recommendedHospitals" },
+        { type: "hospitals", key: "hospitals" },
       ]}
       renderItem={({ item }) => {
         switch (item.key) {
-          case 'search':
+          case "search":
             return (
               <View style={styles.searchBar}>
                 <Icon name="search" size={24} color="#aaa" />
@@ -1548,156 +1952,74 @@ const Dashboard = () => {
                 />
               </View>
             );
-          case 'departments':
+          case "departments":
             return (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Departments</Text>
-                {filteredDepartments.length > 0 ? (
-                  <FlatList
-                    data={filteredDepartments}
-                    renderItem={renderDepartment}
-                    keyExtractor={(item) => item.id.toString()}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                  />
-                ) : (
-                  <Text style={styles.noResultsText}>No departments found.</Text>
-                )}
-              </View>
+              <ScrollView nestedScrollEnabled>
+                <FlatList
+                  data={departments}
+                  renderItem={renderDepartment}
+                  keyExtractor={(item) => item.id.toString()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+              </ScrollView>
             );
-          case 'recommendedHospitals':
+          case "recommendedHospitals":
             return (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Recommended Hospitals</Text>
-                {filteredRecommendedHospitals.length > 0 ? (
-                  <FlatList
-                    data={filteredRecommendedHospitals}
-                    renderItem={renderHospital}
-                    keyExtractor={(item) => item.id.toString()}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                  />
-                ) : (
-                  <Text style={styles.noResultsText}>No recommended hospitals found.</Text>
-                )}
-              </View>
+              <ScrollView nestedScrollEnabled>
+                <FlatList
+                  data={recommendedHospitals}
+                  renderItem={renderHospital}
+                  keyExtractor={(item) => item.id.toString()}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                />
+              </ScrollView>
             );
-          case 'hospitals':
+          case "hospitals":
             return (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Hospitals</Text>
-                {filteredHospitals.length > 0 ? (
-                  <FlatList
-                    data={filteredHospitals}
-                    renderItem={renderHospital}
-                    keyExtractor={(item) => item.id.toString()}
-                    contentContainerStyle={styles.hospitalsList}
-                    numColumns={1}
-                  />
-                ) : (
-                  <Text style={styles.noResultsText}>No hospitals found.</Text>
-                )}
-              </View>
+              <ScrollView nestedScrollEnabled>
+                <FlatList
+                  data={hospitals}
+                  renderItem={renderHospital}
+                  keyExtractor={(item) => item.id.toString()}
+                  numColumns={1}
+                />
+              </ScrollView>
             );
           default:
             return null;
         }
       }}
       keyExtractor={(item) => item.key}
-      ListFooterComponent={() => (
-        <TouchableOpacity
-          style={styles.scrollToTopButton}
-          onPress={() => {
-            // Scroll to top logic
-          }}
-        >
-          <Icon name="arrow-upward" size={24} color="#fff" />
-        </TouchableOpacity>
-      )}
     />
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f9f9f9' },
   searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
     margin: 10,
-    padding: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
   },
-  searchInput: { marginLeft: 10, flex: 1 },
-  section: { marginTop: 20, paddingHorizontal: 10 },
-  sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
-  departmentCard: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    padding: 10,
-    marginRight: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  departmentIcon: { marginBottom: 10 },
-  departmentName: { fontSize: 14, fontWeight: 'bold' },
-  hospitalsList: { justifyContent: 'space-between', paddingHorizontal: 5 },
-  hospitalCardImproved: {
+  searchInput: {
     flex: 1,
-    backgroundColor: '#fff',
-    margin: 5,
-    borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 4,
-    padding: 15,
-    borderWidth: 1,
-    borderColor: '#e6e6e6',
-  },
-  hospitalCardHeader: {
-    backgroundColor: '#00B4F6',
-    padding: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  hospitalName: {
+    marginLeft: 10,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
   },
-  hospitalAddress: {
-    fontSize: 14,
-    color: '#555',
-    textAlign: 'center',
-    marginTop: 5,
-  },
-  scrollToTopButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#00B4F6',
+  item: {
     padding: 15,
-    borderRadius: 50,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
+    margin: 5,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 5,
   },
-  noResultsText: { fontSize: 14, color: '#aaa', textAlign: 'center', marginTop: 10 },
+  itemText: {
+    fontSize: 16,
+  },
 });
 
 export default Dashboard;
+
