@@ -127,7 +127,6 @@
 
 // export default AdminDashboard;
 
-
 // import React, { useState } from 'react';
 // import { View, ScrollView, StyleSheet, Dimensions } from 'react-native';
 // import { Card, Button, Icon, Text } from 'react-native-elements';
@@ -180,7 +179,7 @@
 //         </Card>
 
 //         {/* Manage Doctors Button */}
-       
+
 //       </View>
 //     </ScrollView>
 //   );
@@ -226,7 +225,6 @@
 // });
 
 // export default AdminDashboard;
-
 
 // import React, { useState } from 'react';
 // import { View, FlatList, StyleSheet, Dimensions } from 'react-native';
@@ -339,49 +337,161 @@
 
 // export default AdminDashboard;
 
+// import React, { useState } from "react";
+// import { View, FlatList, StyleSheet, Dimensions } from "react-native";
+// import { Card, Icon, Text } from "react-native-elements";
 
-import React, { useState } from 'react';
-import { View, FlatList, StyleSheet, Dimensions } from 'react-native';
-import { Card, Icon, Text } from 'react-native-elements';
+// const AdminDashboard = () => {
+//   const [data, setData] = useState([
+//     {
+//       id: "1",
+//       title: "Hospital Count",
+//       count: 1,
+//       icon: "hospital-o",
+//       color: "#FF5722",
+//     },
+//     {
+//       id: "2",
+//       title: "Doctor Count",
+//       count: 1,
+//       icon: "stethoscope",
+//       color: "#4CAF50",
+//     },
+//     {
+//       id: "3",
+//       title: "Patient Count",
+//       count: 1,
+//       icon: "user-md",
+//       color: "#2196F3",
+//     },
+//     {
+//       id: "4",
+//       title: "Appointments Count",
+//       count: 1,
+//       icon: "calendar",
+//       color: "#FF9800",
+//     },
+//   ]);
+
+//   const screenWidth = Dimensions.get("window").width;
+//   const cardWidth = (screenWidth - 40) / 2;
+
+//   const renderItem = ({ item }) => (
+//     <Card containerStyle={[styles.card, { width: cardWidth }]}>
+//       <Card.Title style={styles.cardTitle}>{item.title}</Card.Title>
+//       <Card.Divider />
+//       <Icon name={item.icon} type="font-awesome" size={50} color={item.color} />
+//       <Text style={styles.cardText}>Total: {item.count}</Text>
+//     </Card>
+//   );
+
+//   return (
+//     <View style={{ flex: 1 }}>
+//       {/* Menu Bar */}
+//       <View style={styles.menuBar}>
+//         <Text style={styles.menuBarText}>Admin Dashboard</Text>
+//       </View>
+
+//       <FlatList
+//         data={data}
+//         renderItem={renderItem}
+//         keyExtractor={(item) => item.id}
+//         numColumns={2}
+//         contentContainerStyle={styles.container}
+//         columnWrapperStyle={styles.row}
+//         nestedScrollEnabled={true}
+//       />
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 10,
+//     backgroundColor: "#F5F5F5",
+//   },
+//   menuBar: {
+//     backgroundColor: "#00B4F6",
+//     paddingVertical: 10,
+//     paddingHorizontal: 15,
+//   },
+//   menuBarText: {
+//     color: "#fff",
+//     fontSize: 18,
+//     fontWeight: "bold",
+//     textAlign: "center",
+//   },
+//   row: {
+//     justifyContent: "space-between",
+//     marginBottom: 10,
+//   },
+//   card: {
+//     borderRadius: 10,
+//     elevation: 5,
+//     backgroundColor: "#fff",
+//     padding: 10,
+//     marginHorizontal: 5,
+//     marginVertical: 5,
+//   },
+//   cardTitle: {
+//     fontSize: 16,
+//     fontWeight: "bold",
+//     color: "#333",
+//     textAlign: "center",
+//   },
+//   cardText: {
+//     marginTop: 10,
+//     textAlign: "center",
+//     color: "#777",
+//   },
+// });
+
+// export default AdminDashboard;
+
+
+import React, { useState } from "react";
+import { View, FlatList, StyleSheet, Dimensions, Text } from "react-native";
+import { Card, Icon } from "react-native-elements";
 
 const AdminDashboard = () => {
   const [data, setData] = useState([
     {
-      id: '1',
-      title: 'Hospital Count',
+      id: "1",
+      title: "Hospital Count",
       count: 1,
-      icon: 'hospital-o',
-      color: '#FF5722',
+      icon: "hospital-o",
+      color: "#FF5722",
     },
     {
-      id: '2',
-      title: 'Doctor Count',
+      id: "2",
+      title: "Doctor Count",
       count: 1,
-      icon: 'stethoscope',
-      color: '#4CAF50',
+      icon: "stethoscope",
+      color: "#4CAF50",
     },
     {
-      id: '3',
-      title: 'Patient Count',
+      id: "3",
+      title: "Patient Count",
       count: 1,
-      icon: 'user-md',
-      color: '#2196F3',
+      icon: "user-md",
+      color: "#2196F3",
     },
     {
-      id: '4',
-      title: 'Appointments Count',
+      id: "4",
+      title: "Appointments Count",
       count: 1,
-      icon: 'calendar',
-      color: '#FF9800',
+      icon: "calendar",
+      color: "#FF9800",
     },
   ]);
 
-  const screenWidth = Dimensions.get('window').width;
-  const cardWidth = (screenWidth - 40) / 2; 
+  const screenWidth = Dimensions.get("window").width;
+  const cardWidth = (screenWidth - 40) / 2;
 
   const renderItem = ({ item }) => (
     <Card containerStyle={[styles.card, { width: cardWidth }]}>
-      <Card.Title style={styles.cardTitle}>{item.title}</Card.Title>
+      {/* ✅ Use Text instead of Card.Title */}
+      <Text style={styles.cardTitle}>{item.title}</Text>
       <Card.Divider />
       <Icon name={item.icon} type="font-awesome" size={50} color={item.color} />
       <Text style={styles.cardText}>Total: {item.count}</Text>
@@ -395,58 +505,57 @@ const AdminDashboard = () => {
         <Text style={styles.menuBarText}>Admin Dashboard</Text>
       </View>
 
-    
       <FlatList
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
-        numColumns={2} 
+        numColumns={2}
         contentContainerStyle={styles.container}
         columnWrapperStyle={styles.row}
+        nestedScrollEnabled={true} // ✅ Fix for VirtualizedList Warning
       />
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
   },
   menuBar: {
-    backgroundColor: '#00B4F6',
+    backgroundColor: "#00B4F6",
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
   menuBarText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   row: {
-    justifyContent: 'space-between', 
-    marginBottom: 10, 
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   card: {
     borderRadius: 10,
     elevation: 5,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 10,
-    marginHorizontal: 5, 
-    marginVertical: 5, 
+    marginHorizontal: 5,
+    marginVertical: 5,
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
   },
   cardText: {
     marginTop: 10,
-    textAlign: 'center',
-    color: '#777',
+    textAlign: "center",
+    color: "#777",
   },
 });
 
