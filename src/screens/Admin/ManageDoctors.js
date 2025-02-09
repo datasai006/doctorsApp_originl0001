@@ -1129,8 +1129,245 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import { View, Text, StyleSheet, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Modal } from 'react-native';
+// import { Picker } from '@react-native-picker/picker';
+// import { MaterialIcons } from '@expo/vector-icons';
+
+// const ManageDoctors = () => {
+//   const [activeTab, setActiveTab] = useState('add');
+//   const [doctorDetails, setDoctorDetails] = useState({
+//     name: '',
+//     education: '',
+//     department: '',
+//     registrationId: '',
+//     experience: '',
+//     hospital: '',
+//     city: '',
+//     town: '',
+//   });
+//   const [doctors, setDoctors] = useState([]);
+//   const [departments, setDepartments] = useState([]); // Dynamic data for departments
+//   const [hospitals, setHospitals] = useState([]); // Dynamic data for hospitals
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [editDoctorId, setEditDoctorId] = useState(null);
+//   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+//   const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+
+//   useEffect(() => {
+//     // Fetch dynamic dropdown options (Replace these with API calls if needed)
+//     setDepartments(['Cardiology', 'Orthopedics', 'Neurology', 'Pediatrics']);
+//     setHospitals(['City Hospital', 'Global Health', 'Green Valley Hospital']);
+//   }, []);
+
+//   const handleInputChange = (field, value) => {
+//     setDoctorDetails({ ...doctorDetails, [field]: value });
+//   };
+
+//   const handleAddOrUpdateDoctor = () => {
+//     const { name, education, department, registrationId, experience, hospital, city, town } = doctorDetails;
+
+//     if (!name.trim() || !education.trim() || !department || !registrationId.trim() || !hospital) {
+//       Alert.alert('Validation Error', 'Please fill in all required fields.');
+//       return;
+//     }
+
+//     if (isEditing) {
+//       setDoctors((prevDoctors) =>
+//         prevDoctors.map((doctor) =>
+//           doctor.id === editDoctorId ? { id: doctor.id, ...doctorDetails } : doctor
+//         )
+//       );
+//       setIsEditing(false);
+//       setEditDoctorId(null);
+//     } else {
+//       setDoctors([...doctors, { id: Math.random().toString(), ...doctorDetails }]);
+//     }
+
+//     setDoctorDetails({
+//       name: '',
+//       education: '',
+//       department: '',
+//       registrationId: '',
+//       experience: '',
+//       hospital: '',
+//       city: '',
+//       town: '',
+//     });
+//     setActiveTab('view');
+//   };
+
+//   const handleEditDoctor = (id) => {
+//     const doctorToEdit = doctors.find((doctor) => doctor.id === id);
+//     setDoctorDetails(doctorToEdit);
+//     setIsEditing(true);
+//     setEditDoctorId(id);
+//     setActiveTab('add');
+//   };
+
+//   const handleDeleteDoctor = () => {
+//     setDoctors(doctors.filter((doctor) => doctor.id !== selectedDoctorId));
+//     setDeleteModalVisible(false);
+//     setSelectedDoctorId(null);
+//   };
+
+//   return (
+//     <KeyboardAvoidingView
+//       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+//       style={{ flex: 1 }}
+//     >
+//       <ScrollView contentContainerStyle={styles.container}>
+//         <Text style={styles.header}>Manage Doctors</Text>
+
+//         {/* Tabs */}
+//         <View style={styles.tabs}>
+//           <TouchableOpacity
+//             style={[styles.tab, activeTab === 'add' && styles.activeTab]}
+//             onPress={() => setActiveTab('add')}
+//           >
+//             <Text style={[styles.tabText, activeTab === 'add' && styles.activeTabText]}>Add Doctor</Text>
+//           </TouchableOpacity>
+//           <TouchableOpacity
+//             style={[styles.tab, activeTab === 'view' && styles.activeTab]}
+//             onPress={() => setActiveTab('view')}
+//           >
+//             <Text style={[styles.tabText, activeTab === 'view' && styles.activeTabText]}>View Doctors</Text>
+//           </TouchableOpacity>
+//         </View>
+
+//         {/* Add Doctor Form */}
+//         {activeTab === 'add' && (
+//           <View style={styles.formContainer}>
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Name *"
+//               value={doctorDetails.name}
+//               onChangeText={(text) => handleInputChange('name', text)}
+//             />
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Education *"
+//               value={doctorDetails.education}
+//               onChangeText={(text) => handleInputChange('education', text)}
+//             />
+//             <Picker
+//               selectedValue={doctorDetails.department}
+//               onValueChange={(value) => handleInputChange('department', value)}
+//               style={styles.input}
+//             >
+//               <Picker.Item label="Select Department *" value="" />
+//               {departments.map((dept, index) => (
+//                 <Picker.Item key={index} label={dept} value={dept} />
+//               ))}
+//             </Picker>
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Registration ID *"
+//               value={doctorDetails.registrationId}
+//               onChangeText={(text) => handleInputChange('registrationId', text)}
+//             />
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Experience"
+//               value={doctorDetails.experience}
+//               onChangeText={(text) => handleInputChange('experience', text)}
+//             />
+//             <Picker
+//               selectedValue={doctorDetails.hospital}
+//               onValueChange={(value) => handleInputChange('hospital', value)}
+//               style={styles.input}
+//             >
+//               <Picker.Item label="Select Working Hospital *" value="" />
+//               {hospitals.map((hospital, index) => (
+//                 <Picker.Item key={index} label={hospital} value={hospital} />
+//               ))}
+//             </Picker>
+//             <TextInput
+//               style={styles.input}
+//               placeholder="City"
+//               value={doctorDetails.city}
+//               onChangeText={(text) => handleInputChange('city', text)}
+//             />
+//             <TextInput
+//               style={styles.input}
+//               placeholder="Town"
+//               value={doctorDetails.town}
+//               onChangeText={(text) => handleInputChange('town', text)}
+//             />
+
+//             <TouchableOpacity style={styles.addButton} onPress={handleAddOrUpdateDoctor}>
+//               <Text style={styles.addButtonText}>{isEditing ? 'Update Doctor' : 'Add Doctor'}</Text>
+//             </TouchableOpacity>
+//           </View>
+//         )}
+
+//         {/* View Doctors */}
+//         {activeTab === 'view' && (
+//           <FlatList
+//             style={styles.list}
+//             data={doctors}
+//             keyExtractor={(item) => item.id}
+//             renderItem={({ item }) => (
+//               <View style={styles.listItem}>
+//                 <View style={styles.listContent}>
+//                   <Text style={styles.listText}>Name: {item.name}</Text>
+//                   <Text style={styles.listText}>Education: {item.education}</Text>
+//                   <Text style={styles.listText}>Department: {item.department}</Text>
+//                   <Text style={styles.listText}>Hospital: {item.hospital}</Text>
+//                   <Text style={styles.listText}>Registration ID: {item.registrationId}</Text>
+//                 </View>
+//                 <View style={styles.iconContainer}>
+//                   <TouchableOpacity onPress={() => handleEditDoctor(item.id)}>
+//                     <MaterialIcons name="edit" size={24} color="#4CAF50" />
+//                   </TouchableOpacity>
+//                   <TouchableOpacity
+//                     onPress={() => {
+//                       setSelectedDoctorId(item.id);
+//                       setDeleteModalVisible(true);
+//                     }}
+//                   >
+//                     <MaterialIcons name="delete" size={24} color="#F44336" />
+//                   </TouchableOpacity>
+//                 </View>
+//               </View>
+//             )}
+//           />
+//         )}
+
+//         {/* Delete Confirmation Modal */}
+//         <Modal
+//           visible={deleteModalVisible}
+//           transparent
+//           animationType="slide"
+//           onRequestClose={() => setDeleteModalVisible(false)}
+//         >
+//           <View style={styles.modalContainer}>
+//             <View style={styles.modalContent}>
+//               <Text style={styles.modalText}>Are you sure you want to delete this doctor?</Text>
+//               <View style={styles.modalButtons}>
+//                 <TouchableOpacity
+//                   style={[styles.modalButton, styles.modalCancelButton]}
+//                   onPress={() => setDeleteModalVisible(false)}
+//                 >
+//                   <Text style={styles.modalCancelText}>Cancel</Text>
+//                 </TouchableOpacity>
+//                 <TouchableOpacity
+//                   style={[styles.modalButton, styles.modalDeleteButton]}
+//                   onPress={handleDeleteDoctor}
+//                 >
+//                   <Text style={styles.modalDeleteText}>Delete</Text>
+//                 </TouchableOpacity>
+//               </View>
+//             </View>
+//           </View>
+//         </Modal>
+//       </ScrollView>
+//     </KeyboardAvoidingView>
+//   );
+// };
+
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, Alert, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform, Modal } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, Alert, TouchableOpacity, KeyboardAvoidingView, Platform, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -1211,161 +1448,161 @@ const ManageDoctors = () => {
     setSelectedDoctorId(null);
   };
 
+  // Create renderItem function for FlatList
+  const renderDoctorItem = ({ item }) => (
+    <View style={styles.listItem}>
+      <View style={styles.listContent}>
+        <Text style={styles.listText}>Name: {item.name}</Text>
+        <Text style={styles.listText}>Education: {item.education}</Text>
+        <Text style={styles.listText}>Department: {item.department}</Text>
+        <Text style={styles.listText}>Hospital: {item.hospital}</Text>
+        <Text style={styles.listText}>Registration ID: {item.registrationId}</Text>
+      </View>
+      <View style={styles.iconContainer}>
+        <TouchableOpacity onPress={() => handleEditDoctor(item.id)}>
+          <MaterialIcons name="edit" size={24} color="#4CAF50" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedDoctorId(item.id);
+            setDeleteModalVisible(true);
+          }}
+        >
+          <MaterialIcons name="delete" size={24} color="#F44336" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.header}>Manage Doctors</Text>
+      <FlatList
+        contentContainerStyle={styles.container}
+        ListHeaderComponent={() => (
+          <>
+            <Text style={styles.header}>Manage Doctors</Text>
 
-        {/* Tabs */}
-        <View style={styles.tabs}>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'add' && styles.activeTab]}
-            onPress={() => setActiveTab('add')}
-          >
-            <Text style={[styles.tabText, activeTab === 'add' && styles.activeTabText]}>Add Doctor</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.tab, activeTab === 'view' && styles.activeTab]}
-            onPress={() => setActiveTab('view')}
-          >
-            <Text style={[styles.tabText, activeTab === 'view' && styles.activeTabText]}>View Doctors</Text>
-          </TouchableOpacity>
-        </View>
+            {/* Tabs */}
+            <View style={styles.tabs}>
+              <TouchableOpacity
+                style={[styles.tab, activeTab === 'add' && styles.activeTab]}
+                onPress={() => setActiveTab('add')}
+              >
+                <Text style={[styles.tabText, activeTab === 'add' && styles.activeTabText]}>Add Doctor</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.tab, activeTab === 'view' && styles.activeTab]}
+                onPress={() => setActiveTab('view')}
+              >
+                <Text style={[styles.tabText, activeTab === 'view' && styles.activeTabText]}>View Doctors</Text>
+              </TouchableOpacity>
+            </View>
 
-        {/* Add Doctor Form */}
-        {activeTab === 'add' && (
-          <View style={styles.formContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Name *"
-              value={doctorDetails.name}
-              onChangeText={(text) => handleInputChange('name', text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Education *"
-              value={doctorDetails.education}
-              onChangeText={(text) => handleInputChange('education', text)}
-            />
-            <Picker
-              selectedValue={doctorDetails.department}
-              onValueChange={(value) => handleInputChange('department', value)}
-              style={styles.input}
-            >
-              <Picker.Item label="Select Department *" value="" />
-              {departments.map((dept, index) => (
-                <Picker.Item key={index} label={dept} value={dept} />
-              ))}
-            </Picker>
-            <TextInput
-              style={styles.input}
-              placeholder="Registration ID *"
-              value={doctorDetails.registrationId}
-              onChangeText={(text) => handleInputChange('registrationId', text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Experience"
-              value={doctorDetails.experience}
-              onChangeText={(text) => handleInputChange('experience', text)}
-            />
-            <Picker
-              selectedValue={doctorDetails.hospital}
-              onValueChange={(value) => handleInputChange('hospital', value)}
-              style={styles.input}
-            >
-              <Picker.Item label="Select Working Hospital *" value="" />
-              {hospitals.map((hospital, index) => (
-                <Picker.Item key={index} label={hospital} value={hospital} />
-              ))}
-            </Picker>
-            <TextInput
-              style={styles.input}
-              placeholder="City"
-              value={doctorDetails.city}
-              onChangeText={(text) => handleInputChange('city', text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Town"
-              value={doctorDetails.town}
-              onChangeText={(text) => handleInputChange('town', text)}
-            />
+            {/* Add Doctor Form */}
+            {activeTab === 'add' && (
+              <View style={styles.formContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name *"
+                  value={doctorDetails.name}
+                  onChangeText={(text) => handleInputChange('name', text)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Education *"
+                  value={doctorDetails.education}
+                  onChangeText={(text) => handleInputChange('education', text)}
+                />
+                <Picker
+                  selectedValue={doctorDetails.department}
+                  onValueChange={(value) => handleInputChange('department', value)}
+                  style={styles.input}
+                >
+                  <Picker.Item label="Select Department *" value="" />
+                  {departments.map((dept, index) => (
+                    <Picker.Item key={index} label={dept} value={dept} />
+                  ))}
+                </Picker>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Registration ID *"
+                  value={doctorDetails.registrationId}
+                  onChangeText={(text) => handleInputChange('registrationId', text)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Experience"
+                  value={doctorDetails.experience}
+                  onChangeText={(text) => handleInputChange('experience', text)}
+                />
+                <Picker
+                  selectedValue={doctorDetails.hospital}
+                  onValueChange={(value) => handleInputChange('hospital', value)}
+                  style={styles.input}
+                >
+                  <Picker.Item label="Select Working Hospital *" value="" />
+                  {hospitals.map((hospital, index) => (
+                    <Picker.Item key={index} label={hospital} value={hospital} />
+                  ))}
+                </Picker>
+                <TextInput
+                  style={styles.input}
+                  placeholder="City"
+                  value={doctorDetails.city}
+                  onChangeText={(text) => handleInputChange('city', text)}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Town"
+                  value={doctorDetails.town}
+                  onChangeText={(text) => handleInputChange('town', text)}
+                />
 
-            <TouchableOpacity style={styles.addButton} onPress={handleAddOrUpdateDoctor}>
-              <Text style={styles.addButtonText}>{isEditing ? 'Update Doctor' : 'Add Doctor'}</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {/* View Doctors */}
-        {activeTab === 'view' && (
-          <FlatList
-            style={styles.list}
-            data={doctors}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.listItem}>
-                <View style={styles.listContent}>
-                  <Text style={styles.listText}>Name: {item.name}</Text>
-                  <Text style={styles.listText}>Education: {item.education}</Text>
-                  <Text style={styles.listText}>Department: {item.department}</Text>
-                  <Text style={styles.listText}>Hospital: {item.hospital}</Text>
-                  <Text style={styles.listText}>Registration ID: {item.registrationId}</Text>
-                </View>
-                <View style={styles.iconContainer}>
-                  <TouchableOpacity onPress={() => handleEditDoctor(item.id)}>
-                    <MaterialIcons name="edit" size={24} color="#4CAF50" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectedDoctorId(item.id);
-                      setDeleteModalVisible(true);
-                    }}
-                  >
-                    <MaterialIcons name="delete" size={24} color="#F44336" />
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity style={styles.addButton} onPress={handleAddOrUpdateDoctor}>
+                  <Text style={styles.addButtonText}>{isEditing ? 'Update Doctor' : 'Add Doctor'}</Text>
+                </TouchableOpacity>
               </View>
             )}
-          />
+          </>
         )}
+        data={doctors}
+        renderItem={renderDoctorItem}
+        keyExtractor={(item) => item.id}
+      />
 
-        {/* Delete Confirmation Modal */}
-        <Modal
-          visible={deleteModalVisible}
-          transparent
-          animationType="slide"
-          onRequestClose={() => setDeleteModalVisible(false)}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalText}>Are you sure you want to delete this doctor?</Text>
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.modalCancelButton]}
-                  onPress={() => setDeleteModalVisible(false)}
-                >
-                  <Text style={styles.modalCancelText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.modalDeleteButton]}
-                  onPress={handleDeleteDoctor}
-                >
-                  <Text style={styles.modalDeleteText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
+      {/* Delete Confirmation Modal */}
+      <Modal
+        visible={deleteModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setDeleteModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Are you sure you want to delete this doctor?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.modalCancelButton]}
+                onPress={() => setDeleteModalVisible(false)}
+              >
+                <Text style={styles.modalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.modalDeleteButton]}
+                onPress={handleDeleteDoctor}
+              >
+                <Text style={styles.modalDeleteText}>Delete</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      </ScrollView>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 };
-
 // Styles
 const styles = StyleSheet.create({
   container: {

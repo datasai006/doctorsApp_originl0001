@@ -655,7 +655,6 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -681,7 +680,7 @@ const CustomSidebar = ({ navigation, role, userName = 'venky ', isLoggedIn = tru
   const menuItems = {
     admin: [
       { title: 'Dashboard', route: 'Dashboard', icon: 'dashboard' },
-      { title: 'Departments', route: 'Departments', icon: 'account-circle' },
+      { title: ' Manage Departments', route: 'Departments', icon: 'account-circle' },
       { title: 'Manage Hospitals', route: 'ManageHospitals', icon: 'local-hospital' },
       { title: 'Manage Doctors', route: 'ManageDoctors', icon: 'person' },
       { title: 'Manage Patients', route: 'ManagePatients', icon: 'person' },
@@ -733,13 +732,15 @@ const CustomSidebar = ({ navigation, role, userName = 'venky ', isLoggedIn = tru
       <View style={styles.profileSection}>
         <Image
           source={{
-            uri: profileImage || 'https://via.placeholder.com/80', // Fallback if no image is provided
+            uri: profileImage || "https://via.placeholder.com/80", // Fallback if no image is provided
           }}
           style={styles.profileImage}
         />
         <Text style={styles.profileName}>{dynamicUserName}</Text>
         <Text style={styles.profileRole}>
-          {isLoggedIn ? `Welcome, ${role.charAt(0).toUpperCase() + role.slice(1)}` : 'Visitor'}
+          {isLoggedIn
+            ? `Welcome, ${role.charAt(0).toUpperCase() + role.slice(1)}`
+            : "Visitor"}
         </Text>
       </View>
 
@@ -756,7 +757,7 @@ const CustomSidebar = ({ navigation, role, userName = 'venky ', isLoggedIn = tru
           {searchQuery.length > 0 && (
             <TouchableOpacity
               style={styles.clearButton}
-              onPress={() => setSearchQuery('')}
+              onPress={() => setSearchQuery("")}
             >
               <Icon name="close" size={18} color="#aaa" />
             </TouchableOpacity>
@@ -765,7 +766,7 @@ const CustomSidebar = ({ navigation, role, userName = 'venky ', isLoggedIn = tru
       )}
 
       {/* Scrollable Menu Items */}
-      <ScrollView contentContainerStyle={styles.menuContainer}>
+      {/* <ScrollView contentContainerStyle={styles.menuContainer}>
         {isLoggedIn ? (
           <FlatList
             data={filteredMenuItems}
@@ -775,25 +776,52 @@ const CustomSidebar = ({ navigation, role, userName = 'venky ', isLoggedIn = tru
         ) : (
           <Text style={styles.guestMessage}>Please log in to view menu options.</Text>
         )}
-      </ScrollView>
+      </ScrollView> */}
+      <View style={styles.menuContainer}>
+        {isLoggedIn ? (
+          <FlatList
+            data={filteredMenuItems}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderMenuItem}
+            nestedScrollEnabled={true} // Fix for nested scrolling issue
+          />
+        ) : (
+          <Text style={styles.guestMessage}>
+            Please log in to view menu options.
+          </Text>
+        )}
+      </View>
 
       {/* Footer Section */}
       <View style={styles.footer}>
         {isLoggedIn ? (
           <TouchableOpacity
-            style={[styles.menuItem, { backgroundColor: '#FF4D4D' }]}
-            onPress={() => console.log('Logout pressed')}
+            style={[styles.menuItem, { backgroundColor: "#FF4D4D" }]}
+            onPress={() => console.log("Logout pressed")}
           >
-            <Icon name="logout" size={20} color="#FFFFFF" style={styles.menuIcon} />
+            <Icon
+              name="logout"
+              size={20}
+              color="#FFFFFF"
+              style={styles.menuIcon}
+            />
             <Text style={styles.menuText}>Logout</Text>
           </TouchableOpacity>
         ) : (
           <View>
             <TouchableOpacity
-              style={[styles.menuItem, { backgroundColor: '#00B4F6', marginBottom: 10 }]}
-              onPress={() => navigation.navigate('Login')}
+              style={[
+                styles.menuItem,
+                { backgroundColor: "#00B4F6", marginBottom: 10 },
+              ]}
+              onPress={() => navigation.navigate("Login")}
             >
-              <Icon name="login" size={20} color="#FFFFFF" style={styles.menuIcon} />
+              <Icon
+                name="login"
+                size={20}
+                color="#FFFFFF"
+                style={styles.menuIcon}
+              />
               <Text style={styles.menuText}>Login</Text>
             </TouchableOpacity>
           </View>
@@ -850,8 +878,10 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   menuContainer: {
+    flex: 1, 
     paddingHorizontal: 15,
     paddingVertical: 10,
+   
   },
   menuItem: {
     flexDirection: 'row',

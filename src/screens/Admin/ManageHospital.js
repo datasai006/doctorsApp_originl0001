@@ -2115,6 +2115,1096 @@
 
 // export default ManageHospitals;
 
+// import React, { useState, useEffect } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   TextInput,
+//   FlatList,
+//   Alert,
+//   TouchableOpacity,
+//   KeyboardAvoidingView,
+//   Platform,
+//   Image,
+// } from "react-native";
+// import { Picker } from "@react-native-picker/picker";
+// import * as ImagePicker from "expo-image-picker";
+
+// const ManageHospitals = () => {
+//   const [activeTab, setActiveTab] = useState("add");
+//   const [hospitalDetails, setHospitalDetails] = useState({
+//     name: "",
+//     location: "",
+//     contactNumber: "",
+//     specialty: "",
+//     stateId: "",
+//     districtId: "",
+//     image: null, 
+//   });
+//   const [hospitals, setHospitals] = useState([]);
+//   const [states, setStates] = useState([]);
+//   const [districts, setDistricts] = useState([]);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [editHospitalId, setEditHospitalId] = useState(null);
+
+//   // Request permission to access media library
+  
+
+//   const fetchStates = async () => {
+//     try {
+//       const response = await fetch("http://192.168.29.4:5000/api/state/");
+//       const result = await response.json();
+      
+//       if (result.success) {
+//         setStates(result.data); // Extract the 'data' array
+//       } else {
+//         Alert.alert("Error", "Failed to fetch states.");
+//       }
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch states.");
+//     }
+//   };
+
+//   // const fetchDistricts = async (stateId) => {
+//   //   try {
+//   //     const response = await fetch(
+//   //       `https://192.168.29.4:5000/api/districts/state/${stateId}`
+//   //     );
+//   //     const data = await response.json();
+//   //     setDistricts(data);
+//   //   } catch (error) {
+//   //     Alert.alert("Error", "Failed to fetch districts.");
+//   //   }
+//   // };
+  
+//   const fetchDistricts = async (stateId) => {
+//     try {
+//       console.log("Fetching districts for state ID:", stateId);
+//       const response = await fetch(
+//         `http://192.168.29.4:5000/api/districts/state/${stateId}`
+//       );
+  
+//       if (!response.ok) {
+//         throw new Error(`HTTP error! Status: ${response.status}`);
+//       }
+  
+//       const data = await response.json();
+//       console.log("Districts fetched:", data);
+//       setDistricts(data);
+//     } catch (error) {
+//       console.error("Error fetching districts:", error);
+//       Alert.alert("Error", "Failed to fetch districts.");
+//     }
+//   };
+  
+//   useEffect(() => {
+//     const getPermissions = async () => {
+//       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+//       if (status !== "granted") {
+//         Alert.alert("Permission Denied", "We need permission to access your media library to select an image.");
+//       }
+//     };
+
+//     getPermissions();
+//     fetchStates();
+    
+//   }, []);
+
+//   const handleInputChange = (field, value) => {
+//     setHospitalDetails({ ...hospitalDetails, [field]: value });
+//     console.log(setHospitalDetails);
+//     if (field === "stateId") {
+//       fetchDistricts(value); // Fetch districts dynamically
+//       setHospitalDetails({ ...hospitalDetails, districtId: "" }); // Reset district
+//     }
+//   };
+
+//   // const handleImagePick = async () => {
+//   //   const result = await ImagePicker.launchImageLibraryAsync({
+//   //     mediaTypes: ImagePicker.MediaTypeOptions.Images, // Revert to MediaTypeOptions.Images for compatibility
+//   //     allowsEditing: true,
+//   //     quality: 1,
+//   //   });
+
+//   //   if (!result.canceled) {
+//   //     setHospitalDetails({ ...hospitalDetails, image: result.uri });
+//   //   }
+//   // };
+//   const handleImagePick = async () => {
+//     const result = await ImagePicker.launchImageLibraryAsync({
+//       mediaTypes: ImagePicker.MediaTypeOptions.Images, // To select images only
+//       allowsEditing: true,
+//       quality: 1,
+//     });
+
+//     if (result.canceled) {
+//       // Handle the case where the user cancels the image picker
+//       console.log("Image selection was canceled");
+//     } else {
+//       // Safely accessing the image URI from the result
+//       if (result.assets && result.assets[0]?.uri) {
+//         // Update state with the selected image URI
+//         setHospitalDetails({ ...hospitalDetails, image: result.assets[0].uri });
+//         console.log("Image selected:", result.assets[0].uri);  // Log the selected image URI
+//       } else {
+//         console.log("Image URI not found");
+//       }
+//     }
+//   };
+
+//   const handleAddOrUpdateHospital = () => {
+//     const { name, location, contactNumber, specialty, stateId, districtId, image } =
+//       hospitalDetails;
+
+//     if (!name.trim() || !location.trim() || !contactNumber.trim() || !stateId || !districtId || !image) {
+//       Alert.alert("Validation Error", "Please fill in all required fields.");
+//       return;
+//     }
+
+//     if (isEditing) {
+//       setHospitals((prevHospitals) =>
+//         prevHospitals.map((hospital) =>
+//           hospital.id === editHospitalId
+//             ? { id: hospital.id, ...hospitalDetails }
+//             : hospital
+//         )
+//       );
+//       setIsEditing(false);
+//       setEditHospitalId(null);
+//     } else {
+//       setHospitals([
+//         ...hospitals,
+//         { id: Math.random().toString(), ...hospitalDetails },
+//       ]);
+//     }
+
+//     setHospitalDetails({
+//       name: "",
+//       location: "",
+//       contactNumber: "",
+//       specialty: "",
+//       stateId: "",
+//       districtId: "",
+//       image: null,
+//     });
+//     setActiveTab("view");
+//   };
+
+//   return (
+//     <KeyboardAvoidingView
+//       behavior={Platform.OS === "ios" ? "padding" : "height"}
+//       style={{ flex: 1 }}
+//     >
+//       <FlatList
+//         contentContainerStyle={styles.container}
+//         data={[1]}
+//         renderItem={() => (
+//           <>
+//             <Text style={styles.header}>Manage Hospitals</Text>
+
+//             {/* Tabs */}
+//             <View style={styles.tabs}>
+//               <TouchableOpacity
+//                 style={[styles.tab, activeTab === "add" && styles.activeTab]}
+//                 onPress={() => setActiveTab("add")}
+//               >
+//                 <Text
+//                   style={[
+//                     styles.tabText,
+//                     activeTab === "add" && styles.activeTabText,
+//                   ]}
+//                 >
+//                   {isEditing ? "Edit Hospital" : "Add Hospital"}
+//                 </Text>
+//               </TouchableOpacity>
+
+//               <TouchableOpacity
+//                 style={[styles.tab, activeTab === "view" && styles.activeTab]}
+//                 onPress={() => setActiveTab("view")}
+//               >
+//                 <Text
+//                   style={[
+//                     styles.tabText,
+//                     activeTab === "view" && styles.activeTabText,
+//                   ]}
+//                 >
+//                   View Hospitals
+//                 </Text>
+//               </TouchableOpacity>
+//             </View>
+
+//             {/* Add Hospital Form */}
+//             {activeTab === "add" && (
+//               <View style={styles.formContainer}>
+//                 <TextInput
+//                   style={styles.input}
+//                   placeholder="Hospital Name *"
+//                   value={hospitalDetails.name}
+//                   onChangeText={(text) => handleInputChange("name", text)}
+//                 />
+//                 <TextInput
+//                   style={styles.input}
+//                   placeholder="Location *"
+//                   value={hospitalDetails.location}
+//                   onChangeText={(text) => handleInputChange("location", text)}
+//                 />
+//                 <TextInput
+//                   style={styles.input}
+//                   placeholder="Contact Number *"
+//                   value={hospitalDetails.contactNumber}
+//                   onChangeText={(text) =>
+//                     handleInputChange("contactNumber", text)
+//                   }
+//                 />
+//                 <TextInput
+//                   style={styles.input}
+//                   placeholder="Specialty"
+//                   value={hospitalDetails.specialty}
+//                   onChangeText={(text) => handleInputChange("specialty", text)}
+//                 />
+
+//                 {/* State Dropdown */}
+//                 <Picker
+//                   selectedValue={hospitalDetails.stateId}
+//                   style={styles.input}
+//                   onValueChange={(value) =>
+//                     handleInputChange("stateId", value)
+//                   }
+//                 >
+//                   <Picker.Item label="Select State" value="" />
+//                   {states.map((state) => (
+//                     <Picker.Item
+//                       key={state.id}
+//                       label={state.name}
+//                       value={state.id}
+//                     />
+//                   ))}
+//                 </Picker>
+
+//                 {/* District Dropdown */}
+//                 <Picker
+//                   selectedValue={hospitalDetails.districtId}
+//                   style={styles.input}
+//                   onValueChange={(value) =>
+//                     handleInputChange("districtId", value)
+//                   }
+//                 >
+//                   <Picker.Item label="Select District" value="" />
+//                   {districts.map((district) => (
+//                     <Picker.Item
+//                       key={district.id}
+//                       label={district.name}
+//                       value={district.id}
+//                     />
+//                   ))}
+//                 </Picker>
+
+//                 {/* Image Picker */}
+//                 <TouchableOpacity
+//                   style={styles.imagePicker}
+//                   onPress={handleImagePick}
+//                 >
+//                   <Text style={styles.imagePickerText}>
+//                     {hospitalDetails.image
+//                       ? "Change Image"
+//                       : "Select Hospital Image"}
+//                   </Text>
+//                 </TouchableOpacity>
+
+//                 {hospitalDetails.image && (
+//                   <Image
+//                     source={{ uri: hospitalDetails.image }}
+//                     style={styles.imagePreview}
+//                   />
+//                 )}
+
+//                 <TouchableOpacity
+//                   style={styles.addButton}
+//                   onPress={handleAddOrUpdateHospital}
+//                 >
+//                   <Text style={styles.addButtonText}>
+//                     {isEditing ? "Update Hospital" : "Add Hospital"}
+//                   </Text>
+//                 </TouchableOpacity>
+//               </View>
+//             )}
+//           </>
+//         )}
+//       />
+//     </KeyboardAvoidingView>
+//   );
+// };
+
+// // Styles
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 20,
+//     backgroundColor: "#f5f5f5",
+//   },
+//   header: {
+//     fontSize: 28,
+//     fontWeight: "bold",
+//     textAlign: "center",
+//     marginVertical: 20,
+//   },
+//   tabs: {
+//     flexDirection: "row",
+//     marginBottom: 20,
+//     justifyContent: "center",
+//   },
+//   tab: {
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     borderWidth: 1,
+//     borderColor: "#ccc",
+//     borderRadius: 8,
+//     marginHorizontal: 5,
+//   },
+//   activeTab: {
+//     backgroundColor: "#4CAF50",
+//     borderColor: "#4CAF50",
+//   },
+//   tabText: {
+//     color: "#333",
+//     fontSize: 16,
+//   },
+//   activeTabText: {
+//     color: "#fff",
+//   },
+//   formContainer: {
+//     backgroundColor: "#fff",
+//     padding: 20,
+//     borderRadius: 8,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//   },
+//   input: {
+//     height: 52,
+//     borderColor: "#ccc",
+//     borderWidth: 1,
+//     marginBottom: 10,
+//     paddingHorizontal: 10,
+//     borderRadius: 8,
+//     fontSize: 16,
+//   },
+//   imagePicker: {
+//     backgroundColor: "#4CAF50",
+//     paddingVertical: 12,
+//     borderRadius: 8,
+//     alignItems: "center",
+//     marginBottom: 10,
+//   },
+//   imagePickerText: {
+//     color: "#fff",
+//     fontSize: 18,
+//   },
+//   imagePreview: {
+//     width: "100%",
+//     height: 200,
+//     borderRadius: 8,
+//     marginBottom: 10,
+//   },
+//   addButton: {
+//     backgroundColor: "#4CAF50",
+//     paddingVertical: 12,
+//     borderRadius: 8,
+//     alignItems: "center",
+//     marginTop: 10,
+//   },
+//   addButtonText: {
+//     color: "#fff",
+//     fontSize: 18,
+//   },
+// });
+
+// export default ManageHospitals;
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   TextInput,
+//   FlatList,
+//   Alert,
+//   TouchableOpacity,
+//   Image,
+//   ActivityIndicator,
+// } from "react-native";
+// import { Picker } from "@react-native-picker/picker";
+// import * as ImagePicker from "expo-image-picker";
+
+// const API_BASE_URL = "http://147.93.104.185:5000/api";
+
+// const ManageHospitals = () => {
+//   const [activeTab, setActiveTab] = useState("add");
+//   const [hospitalDetails, setHospitalDetails] = useState({
+//     name: "",
+//     location: "",
+//     contactNumber: "",
+//     specialty: "",
+//     stateId: "",
+//     districtId: "",
+//     image: null,
+//   });
+//   const [hospitals, setHospitals] = useState([]);
+//   const [states, setStates] = useState([]);
+//   const [districts, setDistricts] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [editHospitalId, setEditHospitalId] = useState(null);
+
+//   useEffect(() => {
+//     fetchHospitals();
+//     fetchStates();
+//   }, []);
+
+//   const fetchHospitals = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await fetch(`${API_BASE_URL}/hospitals`);
+//       const data = await response.json();
+//       setHospitals(data);
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch hospitals.");
+//     }
+//     setLoading(false);
+//   };
+
+//   const fetchStates = async () => {
+//     try {
+//       const response = await fetch(`${API_BASE_URL}/state/`);
+//       const result = await response.json();
+//       setStates(result.data);
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch states.");
+//     }
+//   };
+
+//   const fetchDistricts = async (stateId) => {
+//     try {
+//       const response = await fetch(`${API_BASE_URL}/districts/state/${stateId}`);
+//       const data = await response.json();
+//       setDistricts(data);
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch districts.");
+//     }
+//   };
+
+//   const handleInputChange = (field, value) => {
+//     setHospitalDetails({ ...hospitalDetails, [field]: value });
+//     if (field === "stateId") {
+//       fetchDistricts(value);
+//       setHospitalDetails({ ...hospitalDetails, districtId: "" });
+//     }
+//   };
+
+//   const handleImagePick = async () => {
+//     const result = await ImagePicker.launchImageLibraryAsync({
+//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+//       allowsEditing: true,
+//       quality: 1,
+//     });
+
+//     if (!result.canceled && result.assets.length > 0) {
+//       setHospitalDetails({ ...hospitalDetails, image: result.assets[0].uri });
+//     }
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!hospitalDetails.name || !hospitalDetails.location || !hospitalDetails.contact_number || !hospitalDetails.stateId || !hospitalDetails.districtId) {
+//       Alert.alert("Validation Error", "All fields are required.");
+//       return;
+//     }
+
+//     const method = isEditing ? "PUT" : "POST";
+//     const url = isEditing ? `${API_BASE_URL}/hospitals/${editHospitalId}` : `${API_BASE_URL}/hospitals`;
+
+//     try {
+//       const response = await fetch(url, {
+//         method,
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(hospitalDetails),
+//       });
+
+//       const result = await response.json();
+//       if (response.ok) {
+//         Alert.alert("Success", isEditing ? "Hospital updated" : "Hospital added");
+//         fetchHospitals();
+//         resetForm();
+//       } else {
+//         Alert.alert("Error", result.message || "Operation failed");
+//       }
+//     } catch (error) {
+//       Alert.alert("Error", "Network request failed.");
+//     }
+//   };
+
+//   const handleDelete = async (id) => {
+//     Alert.alert("Confirm", "Are you sure you want to delete this hospital?", [
+//       { text: "Cancel", style: "cancel" },
+//       {
+//         text: "Delete",
+//         onPress: async () => {
+//           try {
+//             await fetch(`${API_BASE_URL}/hospitals/${id}`, { method: "DELETE" });
+//             Alert.alert("Deleted", "Hospital removed successfully.");
+//             fetchHospitals();
+//           } catch (error) {
+//             Alert.alert("Error", "Failed to delete hospital.");
+//           }
+//         },
+//       },
+//     ]);
+//   };
+
+//   const resetForm = () => {
+//     setHospitalDetails({
+//       name: "",
+//       location: "",
+//       contactNumber: "",
+//       specialty: "",
+//       stateId: "",
+//       districtId: "",
+//       image: null,
+//     });
+//     setIsEditing(false);
+//     setEditHospitalId(null);
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {/* <Text style={styles.header}>Manage Hospitals</Text> */}
+
+//       {/* Tabs */}
+//       <View style={styles.tabs}>
+//         <TouchableOpacity
+//           style={[styles.tab, activeTab === "add" && styles.activeTab]}
+//           onPress={() => setActiveTab("add")}
+//         >
+//           <Text style={styles.tabText}>{isEditing ? "Edit Hospital" : "Add Hospital"}</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={[styles.tab, activeTab === "view" && styles.activeTab]}
+//           onPress={() => setActiveTab("view")}
+//         >
+//           <Text style={styles.tabText}>View Hospitals</Text>
+//         </TouchableOpacity>
+//       </View>
+
+//       {/* Add/Edit Form */}
+//       {activeTab === "add" && (
+//         <FlatList
+//           data={[]}
+//           ListHeaderComponent={
+//             <View style={styles.formContainer}>
+//               <TextInput style={styles.input} placeholder="Hospital Name" value={hospitalDetails.name} onChangeText={(text) => handleInputChange("name", text)} />
+//               <TextInput style={styles.input} placeholder="Location" value={hospitalDetails.location} onChangeText={(text) => handleInputChange("location", text)} />
+//               <TextInput style={styles.input} placeholder="Contact Number" value={hospitalDetails.contactNumber} onChangeText={(text) => handleInputChange("contactNumber", text)} />
+//               <Picker selectedValue={hospitalDetails.stateId} style={styles.input} onValueChange={(value) => handleInputChange("stateId", value)}>
+//                 <Picker.Item label="Select State" value="" />
+//                 {states.map((state) => <Picker.Item key={state._id} label={state.name} value={state._id} />)}
+//               </Picker>
+//               <Picker selectedValue={hospitalDetails.districtId} style={styles.input} onValueChange={(value) => handleInputChange("districtId", value)}>
+//                 <Picker.Item label="Select District" value="" />
+//                 {districts.map((district) => <Picker.Item key={district._id} label={district.name} value={district._id} />)}
+//               </Picker>
+//               <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
+//                 <Text style={styles.imagePickerText}>{hospitalDetails.image ? "Change Image" : "Select Image"}</Text>
+//               </TouchableOpacity>
+//               {hospitalDetails.image && <Image source={{ uri: hospitalDetails.image }} style={styles.imagePreview} />}
+//               <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+//                 <Text style={styles.addButtonText}>{isEditing ? "Update Hospital" : "Add Hospital"}</Text>
+//               </TouchableOpacity>
+//             </View>
+//           }
+//           keyExtractor={(item, index) => index.toString()}
+//         />
+//       )}
+
+//       {/* View Hospitals List */}
+//       {activeTab === "view" && (
+//         <FlatList
+//           data={hospitals}
+//           keyExtractor={(item) => item._id.toString()}
+//           renderItem={({ item }) => (
+//             <View style={styles.hospitalItem}>
+//               <Text>{item.name}</Text>
+//               <TouchableOpacity onPress={() => handleDelete(item._id)}>
+//                 <Text style={{ color: "red" }}>Delete</Text>
+//               </TouchableOpacity>
+//             </View>
+//           )}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+// // Styles
+// const styles = StyleSheet.create({
+//   container: {
+//     padding: 20,
+//     backgroundColor: "#f5f5f5",
+//   },
+//   header: {
+//     fontSize: 28,
+//     fontWeight: "bold",
+//     textAlign: "center",
+//     marginVertical: 20,
+//   },
+//   tabs: {
+//     flexDirection: "row",
+//     marginBottom: 20,
+//     justifyContent: "center",
+//   },
+//   tab: {
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     borderWidth: 1,
+//     borderColor: "#ccc",
+//     borderRadius: 8,
+//     marginHorizontal: 5,
+//   },
+//   activeTab: {
+//     backgroundColor: "#4CAF50",
+//     borderColor: "#4CAF50",
+//   },
+//   tabText: {
+//     color: "#333",
+//     fontSize: 16,
+//   },
+//   activeTabText: {
+//     color: "#fff",
+//   },
+//   formContainer: {
+//     backgroundColor: "#fff",
+//     padding: 20,
+//     borderRadius: 8,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//     marginBottom:10,
+    
+//   },
+//   input: {
+//     height: 52,
+//     borderColor: "#ccc",
+//     borderWidth: 1,
+//     marginBottom: 10,
+//     paddingHorizontal: 10,
+//     borderRadius: 8,
+//     fontSize: 16,
+//   },
+//   imagePicker: {
+//     backgroundColor: "#4CAF50",
+//     paddingVertical: 12,
+//     borderRadius: 8,
+//     alignItems: "center",
+//     marginBottom: 10,
+//   },
+//   imagePickerText: {
+//     color: "#fff",
+//     fontSize: 18,
+//   },
+//   imagePreview: {
+//     width: "100%",
+//     height: 200,
+//     borderRadius: 8,
+//     marginBottom: 10,
+//   },
+//   addButton: {
+//     backgroundColor: "#4CAF50",
+//     paddingVertical: 12,
+//     borderRadius: 8,
+//     alignItems: "center",
+//     marginTop: 10,
+//     marginBottom:20,
+
+//   },
+//   addButtonText: {
+//     color: "#fff",
+//     fontSize: 18,
+//   },
+// });
+
+// export default ManageHospitals;
+
+// import React, { useState, useEffect } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   TextInput,
+//   FlatList,
+//   Alert,
+//   TouchableOpacity,
+//   Image,
+//   Platform,
+// } from "react-native";
+// import { Picker } from "@react-native-picker/picker";
+// import * as ImagePicker from "expo-image-picker";
+// import * as Location from "expo-location";
+
+// const API_BASE_URL = "http://147.93.104.185:5000/api";
+
+// const ManageHospitals = () => {
+//   const [activeTab, setActiveTab] = useState("add");
+//   const [hospitalDetails, setHospitalDetails] = useState({
+//     name: "",
+//     location: "",
+//     contactNumber: "",
+//     specialty: "",
+//     stateId: "",
+//     districtId: "",
+//     image: null,
+//     statusType: "Recommended",
+//     pinLocation: "",  // Pin location will be set but not shown
+//   });
+//   const [hospitals, setHospitals] = useState([]);
+//   const [states, setStates] = useState([]);
+//   const [districts, setDistricts] = useState([]);
+//   const [loading, setLoading] = useState(false);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [editHospitalId, setEditHospitalId] = useState(null);
+
+//   useEffect(() => {
+//     fetchHospitals();
+//     fetchStates();
+//     getLocation();  // Get the location when the component mounts
+//   }, []);
+
+//   const fetchHospitals = async () => {
+//     setLoading(true);
+//     try {
+//       const response = await fetch(`${API_BASE_URL}/hospitals`);
+//       const data = await response.json();
+//       setHospitals(data);
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch hospitals.");
+//     }
+//     setLoading(false);
+//   };
+
+//   const fetchStates = async () => {
+//     try {
+//       const response = await fetch(`${API_BASE_URL}/state/`);
+//       const result = await response.json();
+//       setStates(result.data);
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch states.");
+//     }
+//   };
+
+//   const fetchDistricts = async (stateId) => {
+//     try {
+//       const response = await fetch(`${API_BASE_URL}/districts/state/${stateId}`);
+//       const data = await response.json();
+//       setDistricts(data);
+//     } catch (error) {
+//       Alert.alert("Error", "Failed to fetch districts.");
+//     }
+//   };
+
+//   const handleInputChange = (field, value) => {
+//     setHospitalDetails({ ...hospitalDetails, [field]: value });
+//     if (field === "stateId") {
+//       fetchDistricts(value);
+//       setHospitalDetails({ ...hospitalDetails, districtId: "" });
+//     }
+//   };
+
+//   const handleImagePick = async () => {
+//     const result = await ImagePicker.launchImageLibraryAsync({
+//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+//       allowsEditing: true,
+//       quality: 1,
+//     });
+
+//     if (!result.canceled && result.assets.length > 0) {
+//       setHospitalDetails({ ...hospitalDetails, image: result.assets[0].uri });
+//     }
+//   };
+
+//   const getLocation = async () => {
+//     // Request permission to access the device location
+//     let { status } = await Location.requestForegroundPermissionsAsync();
+//     if (status !== "granted") {
+//       Alert.alert("Permission Denied", "Permission to access location was denied.");
+//       return;
+//     }
+
+//     // Get the current location (latitude and longitude)
+//     let location = await Location.getCurrentPositionAsync({});
+//     const { latitude, longitude } = location.coords;
+
+//     // Set the pinLocation to the latitude and longitude but do not display it
+//     setHospitalDetails({
+//       ...hospitalDetails,
+//       pinLocation: `${latitude},${longitude}`,  // Save pinLocation but do not show it in the UI
+//     });
+//   };
+
+//   const handleSubmit = async () => {
+//     if (!hospitalDetails.name || !hospitalDetails.location || !hospitalDetails.contactNumber || !hospitalDetails.stateId || !hospitalDetails.districtId) {
+//       Alert.alert("Validation Error", "All fields are required.");
+//       return;
+//     }
+
+//     const method = isEditing ? "PUT" : "POST";
+//     const url = isEditing ? `${API_BASE_URL}/hospitals/${editHospitalId}` : `${API_BASE_URL}/hospitals`;
+
+//     try {
+//       const response = await fetch(url, {
+//         method,
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(hospitalDetails),
+//       });
+
+//       const result = await response.json();
+//       if (response.ok) {
+//         Alert.alert("Success", isEditing ? "Hospital updated" : "Hospital added");
+//         fetchHospitals();
+//         resetForm();
+//       } else {
+//         Alert.alert("Error", result.message || "Operation failed");
+//       }
+//     } catch (error) {
+//       Alert.alert("Error", "Network request failed.");
+//     }
+//   };
+
+//   const handleDelete = async (id) => {
+//     Alert.alert("Confirm", "Are you sure you want to delete this hospital?", [
+//       { text: "Cancel", style: "cancel" },
+//       {
+//         text: "Delete",
+//         onPress: async () => {
+//           try {
+//             await fetch(`${API_BASE_URL}/hospitals/${id}`, { method: "DELETE" });
+//             Alert.alert("Deleted", "Hospital removed successfully.");
+//             fetchHospitals();
+//           } catch (error) {
+//             Alert.alert("Error", "Failed to delete hospital.");
+//           }
+//         },
+//       },
+//     ]);
+//   };
+
+//   const resetForm = () => {
+//     setHospitalDetails({
+//       name: "",
+//       location: "",
+//       contactNumber: "",
+//       specialty: "",
+//       stateId: "",
+//       districtId: "",
+//       image: null,
+//       statusType: "Recommended",
+//       pinLocation: "",  // Reset pinLocation
+//     });
+//     setIsEditing(false);
+//     setEditHospitalId(null);
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       {/* Tabs */}
+//       <View style={styles.tabs}>
+//         <TouchableOpacity
+//           style={[styles.tab, activeTab === "add" && styles.activeTab]}
+//           onPress={() => setActiveTab("add")}
+//         >
+//           <Text style={styles.tabText}>{isEditing ? "Edit Hospital" : "Add Hospital"}</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={[styles.tab, activeTab === "view" && styles.activeTab]}
+//           onPress={() => setActiveTab("view")}
+//         >
+//           <Text style={styles.tabText}>View Hospitals</Text>
+//         </TouchableOpacity>
+//       </View>
+
+//       {/* Add/Edit Form */}
+//       {activeTab === "add" && (
+//         <FlatList
+//           data={[]}
+//           ListHeaderComponent={
+//             <View style={styles.formContainer}>
+//               <TextInput style={styles.input} placeholder="Hospital Name" value={hospitalDetails.name} onChangeText={(text) => handleInputChange("name", text)} />
+//               <TextInput style={styles.input} placeholder="Location" value={hospitalDetails.location} onChangeText={(text) => handleInputChange("location", text)} />
+//               <TextInput style={styles.input} placeholder="Contact Number" value={hospitalDetails.contactNumber} onChangeText={(text) => handleInputChange("contactNumber", text)} />
+//               <TextInput style={styles.input} placeholder="Specialty" value={hospitalDetails.specialty} onChangeText={(text) => handleInputChange("specialty", text)} />
+//               {/* Pin Location is not shown here */}
+//               <View style={styles.pickerWrapper}>
+//                 <Text style={styles.label}>State</Text>
+//                 <Picker
+//                   selectedValue={hospitalDetails.stateId}
+//                   style={styles.picker}
+//                   onValueChange={(value) => handleInputChange("stateId", value)}
+//                 >
+//                   <Picker.Item label="Select State" value="" />
+//                   {states.map((state) => <Picker.Item key={state._id} label={state.name} value={state._id} />)}
+//                 </Picker>
+//               </View>
+//               <View style={styles.pickerWrapper}>
+//                 <Text style={styles.label}>District</Text>
+//                 <Picker
+//                   selectedValue={hospitalDetails.districtId}
+//                   style={styles.picker}
+//                   onValueChange={(value) => handleInputChange("districtId", value)}
+//                 >
+//                   <Picker.Item label="Select District" value="" />
+//                   {districts.map((district) => <Picker.Item key={district._id} label={district.name} value={district._id} />)}
+//                 </Picker>
+//               </View>
+//               {/* StatusType Picker */}
+//               <View style={styles.pickerWrapper}>
+//                 <Text style={styles.label}>Status</Text>
+//                 <Picker
+//                   selectedValue={hospitalDetails.statusType}
+//                   style={styles.picker}
+//                   onValueChange={(value) => handleInputChange("statusType", value)}
+//                 >
+//                   <Picker.Item label="Recommended" value="Recommended" />
+//                   <Picker.Item label="General" value="General" />
+//                 </Picker>
+//               </View>
+//               <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
+//                 <Text style={styles.imagePickerText}>Pick Hospital Image</Text>
+//               </TouchableOpacity>
+//               {hospitalDetails.image && (
+//                 <Image source={{ uri: hospitalDetails.image }} style={styles.imagePreview} />
+//               )}
+//               <TouchableOpacity style={styles.addButton} onPress={handleSubmit}>
+//                 <Text style={styles.addButtonText}>{isEditing ? "Update Hospital" : "Add Hospital"}</Text>
+//               </TouchableOpacity>
+//             </View>
+//           }
+//         />
+//       )}
+
+//       {/* View Hospitals */}
+//       {activeTab === "view" && (
+//         <FlatList
+//           data={hospitals}
+//           renderItem={({ item }) => (
+//             <View style={styles.hospitalItem}>
+//               <Text>{item.name}</Text>
+//               <Text>{item.location}</Text>
+//               <Text>{item.contactNumber}</Text>
+//               <Text>{item.specialty}</Text>
+//               <Text>{item.statusType}</Text>
+//               <TouchableOpacity onPress={() => handleDelete(item._id)}>
+//                 <Text>Delete</Text>
+//               </TouchableOpacity>
+//             </View>
+//           )}
+//           keyExtractor={(item) => item._id.toString()}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 15,
+//     backgroundColor: "#f7f7f7",
+//   },
+//   tabs: {
+//     flexDirection: "row",
+//     justifyContent: "space-around",
+//     marginBottom: 20,
+//   },
+//   tab: {
+//     paddingVertical: 10,
+//     flex: 1,
+//     alignItems: "center",
+//     borderWidth: 1,
+//     borderColor: "#ccc",
+//     borderRadius: 5,
+//   },
+//   activeTab: {
+//     backgroundColor: "#4CAF50",
+//   },
+//   tabText: {
+//     fontSize: 16,
+//   },
+//   formContainer: {
+//     padding: 20,
+//     backgroundColor: "#fff",
+//     borderRadius: 8,
+//     marginBottom: 20,
+//   },
+//   input: {
+//     height: 40,
+//     borderColor: "#ccc",
+//     borderWidth: 1,
+//     marginBottom: 15,
+//     paddingHorizontal: 10,
+//     borderRadius: 5,
+//   },
+//   imagePicker: {
+//     backgroundColor: "#4CAF50",
+//     padding: 10,
+//     borderRadius: 8,
+//     marginVertical: 10,
+//     alignItems: "center",
+//   },
+//   imagePickerText: {
+//     color: "#fff",
+//   },
+//   imagePreview: {
+//     width: 100,
+//     height: 100,
+//     resizeMode: "cover",
+//     marginTop: 10,
+//   },
+//   addButton: {
+//     backgroundColor: "#4CAF50",
+//     paddingVertical: 15,
+//     borderRadius: 8,
+//     marginTop: 20,
+//   },
+//   addButtonText: {
+//     color: "#fff",
+//     fontSize: 16,
+//     textAlign: "center",
+//   },
+//   hospitalItem: {
+//     padding: 15,
+//     backgroundColor: "#fff",
+//     marginVertical: 5,
+//     borderRadius: 8,
+//     shadowColor: "#000",
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 4,
+//   },
+//   pickerWrapper: {
+//     marginBottom: 15,
+//   },
+//   label: {
+//     fontSize: 16,
+//     marginBottom: 5,
+//   },
+//   picker: {
+//     height: 50,
+//     width: "100%",
+//     borderColor: "#ccc",
+//     borderWidth: 1,
+//     borderRadius: 5,
+//   },
+// });
+
+// export default ManageHospitals;
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -2124,12 +3214,15 @@ import {
   FlatList,
   Alert,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
   Image,
+  Platform,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import * as ImagePicker from "expo-image-picker";
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from "expo-location";
+import axios from "axios";
+
+const API_BASE_URL = "http://147.93.104.185:5000/api";
 
 const ManageHospitals = () => {
   const [activeTab, setActiveTab] = useState("add");
@@ -2140,145 +3233,162 @@ const ManageHospitals = () => {
     specialty: "",
     stateId: "",
     districtId: "",
-    image: null, 
+    image: null,
+    statusType: "Recommended",
+    pinLocation: "",  // Pin location will be set but not shown
   });
   const [hospitals, setHospitals] = useState([]);
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editHospitalId, setEditHospitalId] = useState(null);
 
-  // Request permission to access media library
-  
+  useEffect(() => {
+    fetchHospitals();
+    fetchStates();
+    getLocation();  // Get the location when the component mounts
+  }, []);
+
+  const fetchHospitals = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals`);
+      const data = await response.json();
+      setHospitals(data);
+    } catch (error) {
+      Alert.alert("Error", "Failed to fetch hospitals.");
+    }
+    setLoading(false);
+  };
 
   const fetchStates = async () => {
     try {
-      const response = await fetch("http://192.168.29.4:5000/api/state/");
+      const response = await fetch(`${API_BASE_URL}/state/`);
       const result = await response.json();
-      
-      if (result.success) {
-        setStates(result.data); // Extract the 'data' array
-      } else {
-        Alert.alert("Error", "Failed to fetch states.");
-      }
+      setStates(result.data);
     } catch (error) {
       Alert.alert("Error", "Failed to fetch states.");
     }
   };
 
-  // const fetchDistricts = async (stateId) => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://192.168.29.4:5000/api/districts/state/${stateId}`
-  //     );
-  //     const data = await response.json();
-  //     setDistricts(data);
-  //   } catch (error) {
-  //     Alert.alert("Error", "Failed to fetch districts.");
-  //   }
-  // };
-  
   const fetchDistricts = async (stateId) => {
     try {
-      console.log("Fetching districts for state ID:", stateId);
-      const response = await fetch(
-        `http://192.168.29.4:5000/api/districts/state/${stateId}`
-      );
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
+      const response = await fetch(`${API_BASE_URL}/districts/state/${stateId}`);
       const data = await response.json();
-      console.log("Districts fetched:", data);
       setDistricts(data);
     } catch (error) {
-      console.error("Error fetching districts:", error);
       Alert.alert("Error", "Failed to fetch districts.");
     }
   };
-  
-  useEffect(() => {
-    const getPermissions = async () => {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Permission Denied", "We need permission to access your media library to select an image.");
-      }
-    };
-
-    getPermissions();
-    fetchStates();
-    
-  }, []);
 
   const handleInputChange = (field, value) => {
     setHospitalDetails({ ...hospitalDetails, [field]: value });
-    console.log(setHospitalDetails);
     if (field === "stateId") {
-      fetchDistricts(value); // Fetch districts dynamically
-      setHospitalDetails({ ...hospitalDetails, districtId: "" }); // Reset district
+      fetchDistricts(value);
+      setHospitalDetails({ ...hospitalDetails, districtId: "" });
     }
+   
   };
 
-  // const handleImagePick = async () => {
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images, // Revert to MediaTypeOptions.Images for compatibility
-  //     allowsEditing: true,
-  //     quality: 1,
-  //   });
-
-  //   if (!result.canceled) {
-  //     setHospitalDetails({ ...hospitalDetails, image: result.uri });
-  //   }
-  // };
   const handleImagePick = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images, // To select images only
+      mediaTypes: ImagePicker.MediaTypeOptions.Images, // Correct way to define media types
       allowsEditing: true,
       quality: 1,
     });
 
-    if (result.canceled) {
-      // Handle the case where the user cancels the image picker
-      console.log("Image selection was canceled");
-    } else {
-      // Safely accessing the image URI from the result
-      if (result.assets && result.assets[0]?.uri) {
-        // Update state with the selected image URI
-        setHospitalDetails({ ...hospitalDetails, image: result.assets[0].uri });
-        console.log("Image selected:", result.assets[0].uri);  // Log the selected image URI
-      } else {
-        console.log("Image URI not found");
-      }
+    if (!result.canceled && result.assets.length > 0) {
+      setHospitalDetails({ ...hospitalDetails, image: result.assets[0].uri });
     }
   };
 
-  const handleAddOrUpdateHospital = () => {
-    const { name, location, contactNumber, specialty, stateId, districtId, image } =
-      hospitalDetails;
-
-    if (!name.trim() || !location.trim() || !contactNumber.trim() || !stateId || !districtId || !image) {
-      Alert.alert("Validation Error", "Please fill in all required fields.");
+  const getLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission Denied", "Permission to access location was denied.");
       return;
     }
 
-    if (isEditing) {
-      setHospitals((prevHospitals) =>
-        prevHospitals.map((hospital) =>
-          hospital.id === editHospitalId
-            ? { id: hospital.id, ...hospitalDetails }
-            : hospital
-        )
-      );
-      setIsEditing(false);
-      setEditHospitalId(null);
-    } else {
-      setHospitals([
-        ...hospitals,
-        { id: Math.random().toString(), ...hospitalDetails },
-      ]);
+    let location = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = location.coords;
+
+    setHospitalDetails({
+      ...hospitalDetails,
+      pinLocation: `${latitude},${longitude}`,
+    });
+  };
+ 
+
+  const handleSubmit = async () => {
+
+    const { name, location, contactNumber, specialty, image, statusType, pinLocation, stateId, districtId } = hospitalDetails;
+ console.log("Form Data:", hospitalDetails); 
+    if (!name || !location || !contactNumber || !specialty || !statusType || !image || !stateId || !districtId) {
+      Alert.alert("Validation Error", "All fields are required.");
+      return;
     }
 
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("location", location);
+    formData.append("pin_location", pinLocation);
+    formData.append("contact_number", contactNumber);
+    formData.append("specialty", specialty);
+    formData.append("state_id", stateId);
+    formData.append("district_id", districtId);
+    formData.append("status_type", statusType);
+
+    // Image upload
+    const uri = Platform.OS === "android" ? image : image.replace("file://", "");
+    const fileName = image.split("/").pop();
+    const fileType = image.split(".").pop();
+    formData.append("image", {
+      uri,
+      name: fileName,
+      type: `image/${fileType}`,
+    });
+
+    const method = isEditing ? "PUT" : "POST";
+    const url = isEditing ? `${API_BASE_URL}/hospitals/${editHospitalId}` : `${API_BASE_URL}/hospitals`;
+
+    try {
+      const response = await axios({
+        method,
+        url,
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (response.status === 200) {
+        Alert.alert("Success", isEditing ? "Hospital updated" : "Hospital added");
+        fetchHospitals();
+        resetForm();
+      }
+    } catch (error) {
+      Alert.alert("Error", "Error submitting form. Please try again.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    Alert.alert("Confirm", "Are you sure you want to delete this hospital?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        onPress: async () => {
+          try {
+            await fetch(`${API_BASE_URL}/hospitals/${id}`, { method: "DELETE" });
+            Alert.alert("Deleted", "Hospital removed successfully.");
+            fetchHospitals();
+          } catch (error) {
+            Alert.alert("Error", "Failed to delete hospital.");
+          }
+        },
+      },
+    ]);
+  };
+
+  const resetForm = () => {
     setHospitalDetails({
       name: "",
       location: "",
@@ -2287,240 +3397,142 @@ const ManageHospitals = () => {
       stateId: "",
       districtId: "",
       image: null,
+      statusType: "Recommended",
+      pinLocation: "",
     });
-    setActiveTab("view");
+    setIsEditing(false);
+    setEditHospitalId(null);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
-      <FlatList
-        contentContainerStyle={styles.container}
-        data={[1]}
-        renderItem={() => (
-          <>
-            <Text style={styles.header}>Manage Hospitals</Text>
+    <View style={styles.container}>
+      {/* Tabs */}
+      <View style={styles.tabs}>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === "add" && styles.activeTab]}
+          onPress={() => setActiveTab("add")}
+        >
+          <Text style={styles.tabText}>{isEditing ? "Edit Hospital" : "Add Hospital"}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.tab, activeTab === "view" && styles.activeTab]}
+          onPress={() => setActiveTab("view")}
+        >
+          <Text style={styles.tabText}>View Hospitals</Text>
+        </TouchableOpacity>
+      </View>
 
-            {/* Tabs */}
-            <View style={styles.tabs}>
-              <TouchableOpacity
-                style={[styles.tab, activeTab === "add" && styles.activeTab]}
-                onPress={() => setActiveTab("add")}
-              >
-                <Text
-                  style={[
-                    styles.tabText,
-                    activeTab === "add" && styles.activeTabText,
-                  ]}
-                >
-                  {isEditing ? "Edit Hospital" : "Add Hospital"}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.tab, activeTab === "view" && styles.activeTab]}
-                onPress={() => setActiveTab("view")}
-              >
-                <Text
-                  style={[
-                    styles.tabText,
-                    activeTab === "view" && styles.activeTabText,
-                  ]}
-                >
-                  View Hospitals
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Add Hospital Form */}
-            {activeTab === "add" && (
-              <View style={styles.formContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Hospital Name *"
-                  value={hospitalDetails.name}
-                  onChangeText={(text) => handleInputChange("name", text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Location *"
-                  value={hospitalDetails.location}
-                  onChangeText={(text) => handleInputChange("location", text)}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Contact Number *"
-                  value={hospitalDetails.contactNumber}
-                  onChangeText={(text) =>
-                    handleInputChange("contactNumber", text)
-                  }
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="Specialty"
-                  value={hospitalDetails.specialty}
-                  onChangeText={(text) => handleInputChange("specialty", text)}
-                />
-
-                {/* State Dropdown */}
+      {/* Add/Edit Form */}
+      {activeTab === "add" && (
+        <FlatList
+          data={[]}
+          ListHeaderComponent={
+            <View style={styles.formContainer}>
+              <TextInput style={styles.input} placeholder="Hospital Name" value={hospitalDetails.name} onChangeText={(text) => handleInputChange("name", text)} />
+              <TextInput style={styles.input} placeholder="Location" value={hospitalDetails.location} onChangeText={(text) => handleInputChange("location", text)} />
+              <TextInput style={styles.input} placeholder="Contact Number" value={hospitalDetails.contactNumber} onChangeText={(text) => handleInputChange("contactNumber", text)} />
+              <TextInput style={styles.input} placeholder="Specialty" value={hospitalDetails.specialty} onChangeText={(text) => handleInputChange("specialty", text)} />
+              <View style={styles.pickerWrapper}>
+                <Text style={styles.label}>State</Text>
                 <Picker
-                  selectedValue={hospitalDetails.stateId}
-                  style={styles.input}
-                  onValueChange={(value) =>
-                    handleInputChange("stateId", value)
-                  }
+                  selectedValue={hospitalDetails.stateId  }
+                  style={styles.picker}
+                  onValueChange={(value) => {
+                    console.log("State selected: ", value);
+                    handleInputChange("stateId", value);
+                  }}
                 >
                   <Picker.Item label="Select State" value="" />
-                  {states.map((state) => (
-                    <Picker.Item
-                      key={state.id}
-                      label={state.name}
-                      value={state.id}
-                    />
-                  ))}
+                  {states.map((state) => <Picker.Item key={state._id} label={state.name} value={state._id} />)}
                 </Picker>
-
-                {/* District Dropdown */}
+              </View>
+              <View style={styles.pickerWrapper}>
+                <Text style={styles.label}>District</Text>
                 <Picker
                   selectedValue={hospitalDetails.districtId}
-                  style={styles.input}
-                  onValueChange={(value) =>
-                    handleInputChange("districtId", value)
-                  }
+                  style={styles.picker}
+                  // onValueChange={(value) => handleInputChange("districtId", value)}
+                  onValueChange={(value) => {
+                    console.log("dist selected: ", value);
+                    handleInputChange("districtId", value);
+                  }}
                 >
                   <Picker.Item label="Select District" value="" />
-                  {districts.map((district) => (
-                    <Picker.Item
-                      key={district.id}
-                      label={district.name}
-                      value={district.id}
-                    />
-                  ))}
+                  {districts.map((district) => <Picker.Item key={district._id} label={district.name} value={district._id} />)}
                 </Picker>
-
-                {/* Image Picker */}
-                <TouchableOpacity
-                  style={styles.imagePicker}
-                  onPress={handleImagePick}
-                >
-                  <Text style={styles.imagePickerText}>
-                    {hospitalDetails.image
-                      ? "Change Image"
-                      : "Select Hospital Image"}
-                  </Text>
-                </TouchableOpacity>
-
-                {hospitalDetails.image && (
-                  <Image
-                    source={{ uri: hospitalDetails.image }}
-                    style={styles.imagePreview}
-                  />
-                )}
-
-                <TouchableOpacity
-                  style={styles.addButton}
-                  onPress={handleAddOrUpdateHospital}
-                >
-                  <Text style={styles.addButtonText}>
-                    {isEditing ? "Update Hospital" : "Add Hospital"}
-                  </Text>
-                </TouchableOpacity>
               </View>
-            )}
-          </>
-        )}
-      />
-    </KeyboardAvoidingView>
+              <View style={styles.pickerWrapper}>
+                <Text style={styles.label}>Status</Text>
+                <Picker
+                  selectedValue={hospitalDetails.statusType}
+                  style={styles.picker}
+                  onValueChange={(value) => handleInputChange("statusType", value)}
+                >
+                  <Picker.Item label="Recommended" value="Recommended" />
+                  <Picker.Item label="Non Recommended" value="Non Recommended" />
+                </Picker>
+              </View>
+              <TouchableOpacity style={styles.imagePicker} onPress={handleImagePick}>
+                <Text style={styles.imageText}>Pick an Image</Text>
+                {hospitalDetails.image && <Image source={{ uri: hospitalDetails.image }} style={styles.imagePreview} />}
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                <Text style={styles.submitText}>{isEditing ? "Update Hospital" : "Add Hospital"}</Text>
+              </TouchableOpacity>
+            </View>
+          }
+        />
+      )}
+
+      {/* View Hospitals */}
+      {activeTab === "view" && (
+        <FlatList
+          data={hospitals}
+          renderItem={({ item }) => (
+            <View style={styles.hospitalItem}>
+              <Text>{item.name}</Text>
+              <Text>{item.location}</Text>
+              <Text>{item.specialty}</Text>
+              <Text>{item.contactNumber}</Text>
+              <TouchableOpacity style={styles.editButton} onPress={() => { setActiveTab("add"); setIsEditing(true); setEditHospitalId(item._id); setHospitalDetails(item); }}>
+                <Text>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item._id)}>
+                <Text>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          keyExtractor={(item) => item._id.toString()}
+        />
+      )}
+    </View>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-  },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-  },
-  tabs: {
-    flexDirection: "row",
-    marginBottom: 20,
-    justifyContent: "center",
-  },
-  tab: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    marginHorizontal: 5,
-  },
-  activeTab: {
-    backgroundColor: "#4CAF50",
-    borderColor: "#4CAF50",
-  },
-  tabText: {
-    color: "#333",
-    fontSize: 16,
-  },
-  activeTabText: {
-    color: "#fff",
-  },
-  formContainer: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  input: {
-    height: 52,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    fontSize: 16,
-  },
-  imagePicker: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  imagePickerText: {
-    color: "#fff",
-    fontSize: 18,
-  },
-  imagePreview: {
-    width: "100%",
-    height: 200,
-    borderRadius: 8,
-    marginBottom: 10,
-  },
-  addButton: {
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontSize: 18,
-  },
+  container: { flex: 1, padding: 10 },
+  tabs: { flexDirection: "row", marginBottom: 20 },
+  tab: { flex: 1, alignItems: "center", padding: 10 },
+  activeTab: { backgroundColor: "#ddd" },
+  tabText: { fontSize: 18 },
+  formContainer: { marginTop: 20 },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  pickerWrapper: { marginBottom: 10 },
+  label: { fontSize: 16 },
+  picker: { height: 50, borderWidth: 1, borderRadius: 5 },
+  imagePicker: { marginBottom: 10, alignItems: "center" },
+  imageText: { fontSize: 16 },
+  imagePreview: { width: 100, height: 100, marginTop: 10 },
+  submitButton: { backgroundColor: "#4CAF50", padding: 15, borderRadius: 5, alignItems: "center" },
+  submitText: { color: "#fff", fontSize: 18 },
+  hospitalItem: { borderBottomWidth: 1, padding: 10, marginBottom: 10 },
+  editButton: { backgroundColor: "#2196F3", padding: 10, borderRadius: 5, marginTop: 5 },
+  deleteButton: { backgroundColor: "#F44336", padding: 10, borderRadius: 5, marginTop: 5 },
 });
 
 export default ManageHospitals;
+
+
 
 // import React, { useState, useEffect } from "react";
 // import {
